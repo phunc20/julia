@@ -214,3 +214,26 @@ function convolve_image(M::AbstractMatrix, K::AbstractMatrix)
 	half_h_K, half_w_K = size(K) .÷ 2
 	return [ sum([extend_mat(M,i-k,j-l)*K[k+half_h_K+1,l+half_w_K+1] for k in -half_h_K:half_h_K, l in -half_w_K:half_w_K]) for i in 1:size(M,1), j in 1:size(M,2) ]
 end
+
+function gaussian_kernel_2D(n)
+	"""
+	return
+	(2n+1) by (2n+1) matrix
+	"""
+	k = [gaussian((i^2 + j^2)) for i in -n:n, j in -n:n]
+	return k ./ sum(k)
+end
+
+
+function with_gaussian_blur(image)
+	return convolve_image(image, gaussian_kernel_2D(1))
+end
+
+function with_sobel_edge_detect(image)
+	Sx = [1 2 1]'*[1 0 -1]
+	Sy = [1 0 -1]'*[1 2 1]
+	Gx = convolve_image(image, Sx)
+	Gy = convolve_image(image, Sy)
+	G_total = √(Gx^2 + Gy^2)
+	return G_total
+end

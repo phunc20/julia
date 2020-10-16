@@ -1173,14 +1173,8 @@ md"_Edit_ `K_test` _to create your own test case!_"
 # ╔═╡ e7f8b41a-ee25-11ea-287a-e75d33fbd98b
 convolve_image(philip, K_test)
 
-# ╔═╡ 8a335044-ee19-11ea-0255-b9391246d231
-md"""
----
-
-You can create all sorts of effects by choosing the kernel in a smart way. Today, we will implement two special kernels, to produce a **Gaussian blur** and a **Sobel edge detect** filter.
-
-Make sure that you have watched [the lecture](https://www.youtube.com/watch?v=8rrHTtUzyZA) about convolutions!
-"""
+# ╔═╡ 7a7f08fa-0e94-11eb-01f9-49a431944580
+md"#### Stopped here (2020/10/14 17h00)"
 
 # ╔═╡ 7c50ea80-ee15-11ea-328f-6b4e4ff20b7e
 md"""
@@ -1192,10 +1186,19 @@ Here, the 2D Gaussian kernel will be defined as
 $$G(x,y)=\frac{1}{2\pi \sigma^2}e^{\frac{-(x^2+y^2)}{2\sigma^2}}$$
 """
 
+# ╔═╡ b3ec7ac2-0e95-11eb-2823-35632ede6889
+function gaussian_kernel_2D(n)
+	"""
+	return
+	(2n+1) by (2n+1) matrix
+	"""
+	k = [gaussian((i^2 + j^2)) for i in -n:n, j in -n:n]
+	return k ./ sum(k)
+end
+
 # ╔═╡ aad67fd0-ee15-11ea-00d4-274ec3cda3a3
 function with_gaussian_blur(image)
-	
-	return missing
+	return convolve_image(image, gaussian_kernel_2D(1))
 end
 
 # ╔═╡ 8ae59674-ee18-11ea-3815-f50713d0fa08
@@ -1244,10 +1247,29 @@ $$G_\text{total} = \sqrt{G_x^2 + G_y^2}.$$
 For simplicity you can choose one of the "channels" (colours) in the image to apply this to.
 """
 
+# ╔═╡ bce31dbe-0e97-11eb-0df5-9d5380e77fd0
+[1 2 1]'
+
+# ╔═╡ 67643534-0e98-11eb-0569-fd0d8614ad39
+[1;2;1]
+
+# ╔═╡ dc6f63ce-0e98-11eb-1d0d-e352ac0593bd
+Int64[1,2,1]
+
+# ╔═╡ e6dc98ba-0e98-11eb-10a2-339e154ae101
+Array[1,2,1]
+
+# ╔═╡ 6ac0de12-0e98-11eb-2ee8-4f463edf9111
+Sx = [1 2 1]'*[1 0 -1]
+
 # ╔═╡ 9eeb876c-ee15-11ea-1794-d3ea79f47b75
 function with_sobel_edge_detect(image)
-	
-	return missing
+	Sx = [1 2 1]'*[1 0 -1]
+	Sy = [1 0 -1]'*[1 2 1]
+	Gx = convolve_image(image, Sx)
+	Gy = convolve_image(image, Sy)
+	G_total = .√(Gx.^2 + Gy.^2)
+	return G_total
 end
 
 # ╔═╡ 1b85ee76-ee10-11ea-36d7-978340ef61e6
@@ -1813,14 +1835,29 @@ end
 # ╔═╡ f461f5f2-ee18-11ea-3d03-95f57f9bf09e
 gauss_camera_image = process_raw_camera_data(gauss_raw_camera_data);
 
+# ╔═╡ 169c8656-0e95-11eb-0d98-f38cabc852eb
+gauss_camera_image
+
 # ╔═╡ a75701c4-ee18-11ea-2863-d3042e71a68b
 with_gaussian_blur(gauss_camera_image)
 
 # ╔═╡ 1ff6b5cc-ee19-11ea-2ca8-7f00c204f587
 sobel_camera_image = Gray.(process_raw_camera_data(sobel_raw_camera_data));
 
+# ╔═╡ 8ddf2ef2-0e99-11eb-02ea-c743a7cde567
+sobel_camera_image
+
+# ╔═╡ 98f15e46-0e99-11eb-0ba0-45382fb0e7f0
+eltype(sobel_camera_image)
+
+# ╔═╡ a899a9f2-0e99-11eb-036d-db2f9d4ace79
+typeof(sobel_camera_image)
+
 # ╔═╡ 1bf94c00-ee19-11ea-0e3c-e12bc68d8e28
 with_sobel_edge_detect(sobel_camera_image)
+
+# ╔═╡ 441696b0-0e9a-11eb-102c-3f7e4b78c9a6
+Gray.(with_sobel_edge_detect(sobel_camera_image))
 
 # ╔═╡ Cell order:
 # ╠═83eb9ca0-ed68-11ea-0bc5-99a09c68f867
@@ -2101,20 +2138,31 @@ with_sobel_edge_detect(sobel_camera_image)
 # ╠═42dfa206-ee1e-11ea-1fcd-21671042064c
 # ╟─6e53c2e6-ee1e-11ea-21bd-c9c05381be07
 # ╠═e7f8b41a-ee25-11ea-287a-e75d33fbd98b
-# ╟─8a335044-ee19-11ea-0255-b9391246d231
+# ╟─7a7f08fa-0e94-11eb-01f9-49a431944580
 # ╟─7c50ea80-ee15-11ea-328f-6b4e4ff20b7e
+# ╠═b3ec7ac2-0e95-11eb-2823-35632ede6889
 # ╠═aad67fd0-ee15-11ea-00d4-274ec3cda3a3
 # ╟─8ae59674-ee18-11ea-3815-f50713d0fa08
 # ╠═94c0798e-ee18-11ea-3212-1533753eabb6
+# ╠═169c8656-0e95-11eb-0d98-f38cabc852eb
 # ╠═a75701c4-ee18-11ea-2863-d3042e71a68b
 # ╟─f461f5f2-ee18-11ea-3d03-95f57f9bf09e
 # ╟─7c6642a6-ee15-11ea-0526-a1aac4286cdd
+# ╠═bce31dbe-0e97-11eb-0df5-9d5380e77fd0
+# ╠═67643534-0e98-11eb-0569-fd0d8614ad39
+# ╠═dc6f63ce-0e98-11eb-1d0d-e352ac0593bd
+# ╠═e6dc98ba-0e98-11eb-10a2-339e154ae101
+# ╠═6ac0de12-0e98-11eb-2ee8-4f463edf9111
 # ╠═9eeb876c-ee15-11ea-1794-d3ea79f47b75
-# ╟─1a0324de-ee19-11ea-1d4d-db37f4136ad3
+# ╠═1a0324de-ee19-11ea-1d4d-db37f4136ad3
+# ╠═8ddf2ef2-0e99-11eb-02ea-c743a7cde567
+# ╠═98f15e46-0e99-11eb-0ba0-45382fb0e7f0
+# ╠═a899a9f2-0e99-11eb-036d-db2f9d4ace79
 # ╠═1bf94c00-ee19-11ea-0e3c-e12bc68d8e28
+# ╠═441696b0-0e9a-11eb-102c-3f7e4b78c9a6
 # ╟─1ff6b5cc-ee19-11ea-2ca8-7f00c204f587
 # ╟─0001f782-ee0e-11ea-1fb4-2b5ef3d241e2
-# ╠═1b85ee76-ee10-11ea-36d7-978340ef61e6
+# ╟─1b85ee76-ee10-11ea-36d7-978340ef61e6
 # ╠═477d0a3c-ee10-11ea-11cf-07b0e0ce6818
 # ╟─91f4778e-ee20-11ea-1b7e-2b0892bd3c0f
 # ╟─8ffe16ce-ee20-11ea-18bd-15640f94b839
