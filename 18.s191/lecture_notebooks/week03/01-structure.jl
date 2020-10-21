@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.11.12
+# v0.11.14
 
 using Markdown
 using InteractiveUtils
@@ -69,19 +69,33 @@ end
 v
 
 # ╔═╡ 3592648a-f5fd-11ea-2ed0-a1d4a4c14d07
+colors[v]
 
+# ╔═╡ 81d88bea-11e0-11eb-02c9-3d6a58988296
+colors[v]'
+
+# ╔═╡ a4069c20-11e0-11eb-3267-d931e5a0abc3
+md"
+`'` means __transpose__ of a matrix?
+"
+
+# ╔═╡ c52dba46-11e0-11eb-3459-9fb0a1186698
+typeof(colors[v])
+
+# ╔═╡ c4642e6c-11e0-11eb-3a21-1d8a659eebb9
+typeof(colors[v]')
 
 # ╔═╡ 7ffa02f6-f5d2-11ea-1b41-15c21f92e9ee
 Int.((1:10) .== 3)
+
+# ╔═╡ 0690e74c-11e1-11eb-236a-736f63a47db0
+(1:10) .== 3
 
 # ╔═╡ 21a15906-f5d3-11ea-3a71-f53eabc31acc
 md"Colors and sliders"
 
 # ╔═╡ 3c5f0ba8-f5d3-11ea-22d3-4f7c513144bc
 md"Data structure for a one-hot vector"
-
-# ╔═╡ 4d2db24e-f5d4-11ea-10d4-b126f643abee
-
 
 # ╔═╡ 4624cd26-f5d3-11ea-1cf8-7d6555eae5fa
 struct OneHot <: AbstractVector{Int}
@@ -103,6 +117,9 @@ x[1:2]
 
 # ╔═╡ cf77d83c-f5fd-11ea-136e-8951de64e05e
 show_vector(x::OneHot) = colors[x .+ 1]'
+
+# ╔═╡ 58d63ebc-11e1-11eb-028f-316ba21898a8
+show_vector(x)
 
 # ╔═╡ 5813e1b2-f5ff-11ea-2849-a1def74fc065
 begin
@@ -130,6 +147,12 @@ x[3:5]
 
 # ╔═╡ bd94f82c-f5d3-11ea-2a1e-77ddaadbfeb9
 collect(x)
+
+# ╔═╡ 9c46e1f6-11e1-11eb-085e-9791e2e8cff1
+x
+
+# ╔═╡ a23679aa-11e1-11eb-36bc-dfc1ca06999d
+collect
 
 # ╔═╡ 8d2c6910-f5d4-11ea-1928-1baf09815687
 md"""How much "information" (numbers) do you need to represent a one-hot vector? Is it $n$ or is it two?
@@ -178,6 +201,11 @@ sparse(M4)
 
 # ╔═╡ d941cd66-f5d8-11ea-26ff-47ba7779ab20
 md"Sparse matrix dictionaries? Before CSC"
+
+# ╔═╡ 7c56506a-11e2-11eb-373f-97b7497a89b7
+md"
+### Stopped here (2020/10/19 15h10)
+"
 
 # ╔═╡ 62a6ec62-f5d9-11ea-071e-ed33c5dea0cd
 md"## Rand: Where is the structure?"
@@ -538,16 +566,21 @@ end
 # ╠═676f6e3a-f5fd-11ea-3552-e7e7c6382276
 # ╠═77ae1146-f5d2-11ea-1226-27d15c90a8df
 # ╠═3592648a-f5fd-11ea-2ed0-a1d4a4c14d07
+# ╠═81d88bea-11e0-11eb-02c9-3d6a58988296
+# ╟─a4069c20-11e0-11eb-3267-d931e5a0abc3
+# ╠═c52dba46-11e0-11eb-3459-9fb0a1186698
+# ╠═c4642e6c-11e0-11eb-3a21-1d8a659eebb9
 # ╠═7ffa02f6-f5d2-11ea-1b41-15c21f92e9ee
+# ╠═0690e74c-11e1-11eb-236a-736f63a47db0
 # ╟─21a15906-f5d3-11ea-3a71-f53eabc31acc
 # ╟─3c5f0ba8-f5d3-11ea-22d3-4f7c513144bc
-# ╠═4d2db24e-f5d4-11ea-10d4-b126f643abee
 # ╠═4624cd26-f5d3-11ea-1cf8-7d6555eae5fa
 # ╠═397ac764-f5fe-11ea-20cc-8d7cab19d410
 # ╠═82c7046c-f5d3-11ea-04e2-ef7c0f4db5da
 # ╠═60214c1a-f5fe-11ea-2d08-c59715bcedd0
 # ╠═7a98f708-f5d3-11ea-2301-cde71ca469ff
 # ╠═cf77d83c-f5fd-11ea-136e-8951de64e05e
+# ╠═58d63ebc-11e1-11eb-028f-316ba21898a8
 # ╠═5813e1b2-f5ff-11ea-2849-a1def74fc065
 # ╠═e51d4ef6-f5fd-11ea-28f1-a1616e17f715
 # ╠═982590d4-f5ff-11ea-3802-73292c75ad6c
@@ -556,6 +589,8 @@ end
 # ╠═a5989a76-f5d3-11ea-3fe5-5f9959199fe8
 # ╠═b0bd6c6a-f5d3-11ea-00ee-b7c155f23481
 # ╠═bd94f82c-f5d3-11ea-2a1e-77ddaadbfeb9
+# ╠═9c46e1f6-11e1-11eb-085e-9791e2e8cff1
+# ╠═a23679aa-11e1-11eb-36bc-dfc1ca06999d
 # ╠═8d2c6910-f5d4-11ea-1928-1baf09815687
 # ╟─81c35324-f5d4-11ea-2338-9f982d38732c
 # ╟─2cfda0dc-f5d5-11ea-16c4-b5a33b90e37f
@@ -577,6 +612,7 @@ end
 # ╠═cde79f38-f5d6-11ea-3297-0b5b240f7b9e
 # ╠═aa09c008-f5d8-11ea-1bdc-b51ee6eb2478
 # ╟─d941cd66-f5d8-11ea-26ff-47ba7779ab20
+# ╠═7c56506a-11e2-11eb-373f-97b7497a89b7
 # ╟─62a6ec62-f5d9-11ea-071e-ed33c5dea0cd
 # ╠═67274c3c-f5d9-11ea-3475-c9d228e3bd5a
 # ╟─b6c7a918-f600-11ea-18ff-6521507358c6

@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.11.12
+# v0.11.14
 
 using Markdown
 using InteractiveUtils
@@ -59,7 +59,7 @@ Feel free to ask questions!
 # ╔═╡ 33e43c7c-f381-11ea-3abc-c942327456b1
 # edit the code below to set your name and kerberos ID (i.e. email without @mit.edu)
 
-student = (name = "Jazzy Doe", kerberos_id = "jazz")
+student = (name = "phunc20", kerberos_id = "jazz")
 
 # you might need to wait until all other cells in this notebook have completed running. 
 # scroll around the page to see what's up
@@ -76,7 +76,11 @@ md"_Let's create a package environment:_"
 # ╔═╡ 0d144802-f319-11ea-0028-cd97a776a3d0
 #img = load(download("https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Piet_Mondriaan%2C_1930_-_Mondrian_Composition_II_in_Red%2C_Blue%2C_and_Yellow.jpg/300px-Piet_Mondriaan%2C_1930_-_Mondrian_Composition_II_in_Red%2C_Blue%2C_and_Yellow.jpg"))
 #img = load(download("https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Hilma_af_Klint_-_Group_IX_SUW%2C_The_Swan_No._1_%2813947%29.jpg/477px-Hilma_af_Klint_-_Group_IX_SUW%2C_The_Swan_No._1_%2813947%29.jpg"))
-img = load(download("https://i.imgur.com/4SRnmkj.png"))
+#img = load(download("https://i.imgur.com/4SRnmkj.png"))
+img = load("fruits-creatures.png")
+
+# ╔═╡ 78f3d1ba-11ef-11eb-1385-032119a54ee9
+
 
 # ╔═╡ cc9fcdae-f314-11ea-1b9a-1f68b792f005
 md"""
@@ -101,6 +105,27 @@ Below is a function called `remove_in_each_row(img, pixels)`. It takes a matrix 
 Read it and convince yourself that it is correct.
 """
 
+# ╔═╡ 5d9c9270-11f0-11eb-14e8-6f5ffe7a6c41
+vcat
+
+# ╔═╡ 6882bbd8-11f0-11eb-1c83-7f4c929d60fb
+hcat
+
+# ╔═╡ 45bccee0-11f0-11eb-0689-7b83f464a92b
+vcat(img[1, 3:5], img[2, 7:9])
+
+# ╔═╡ fe46cf3a-11f0-11eb-120a-6d9d66f001da
+size(img[1, 3:5])
+
+# ╔═╡ a12da3b2-11f0-11eb-3d19-c994afe71784
+size(vcat(img[1, 3:5], img[2, 7:9]))
+
+# ╔═╡ e208b2dc-11f0-11eb-3b7a-af3a6a318ccf
+size(hcat(img[1, 3:5], img[2, 7:9]))
+
+# ╔═╡ 61679010-1352-11eb-3f62-8168365de821
+
+
 # ╔═╡ e799be82-f317-11ea-3ae4-6d13ece3fe10
 function remove_in_each_row(img, column_numbers)
 	@assert size(img, 1) == length(column_numbers) # same as the number of rows
@@ -112,12 +137,21 @@ function remove_in_each_row(img, column_numbers)
 
 	for (i, j) in enumerate(column_numbers)
 		img′[i, :] = vcat(img[i, 1:j-1], img[i, j+1:end])
+		## Here it probably doesn't matter whether we use hcat or vcat, right?
+		#img′[i, :] = hcat(img[i, 1:j-1], img[i, j+1:end])
+		## No, it matters!!!
 	end
 	img′
 end
 
 # ╔═╡ c075a8e6-f382-11ea-2263-cd9507324f4f
 md"Let's use it to remove the pixels on the diagonal. These are the image dimensions before and after doing so:"
+
+# ╔═╡ d5e2178a-1358-11eb-2fea-9104a63e4f80
+(before=img, after=remove_in_each_row(img, 1:size(img, 1)))
+
+# ╔═╡ f7a945d4-1358-11eb-0c6f-87875e89bbb7
+remove_in_each_row(img, 1:size(img, 1))
 
 # ╔═╡ 9cced1a8-f326-11ea-0759-0b2f22e5a1db
 (before=size(img), after=size(remove_in_each_row(img, 1:size(img, 1))))
@@ -128,7 +162,7 @@ md"""
 
 We can use the `@benchmark` macro from the [BenchmarkTools.jl](https://github.com/JuliaCI/BenchmarkTools.jl) package to benchmark fragments of Julia code. 
 
-`@benchmark` takes an expression and runs it a number of times to obtain statistics about the run time and memory allocation. We generally take the minimum time as the most stable measurement of performance ([for reasons discussed in the paper on BenchmarkTools](http://www-math.mit.edu/~edelman/publications/robust_benchmarking.pdf))
+`@benchmark` takes an expression and runs it a number of times to obtain statistics about the run time (somewhat like `%%timeit` in Jupyter notebook) and memory allocation. We generally take the __`minimum time`__ as the most stable measurement of performance ([for reasons discussed in the paper on BenchmarkTools](http://www-math.mit.edu/~edelman/publications/robust_benchmarking.pdf))
 """
 
 # ╔═╡ 59991872-f366-11ea-1036-afe313fb4ec1
@@ -150,6 +184,12 @@ While using `vcat` might make it easy to write the first version of our function
 👉 In `remove_in_each_row_no_vcat` below, figure out a way to avoid the use of `vcat` and modify the function to avoid it.
 """
 
+# ╔═╡ 10eae3b2-11f2-11eb-281d-cf3d2ae95068
+1:10 + 12:20
+
+# ╔═╡ 2e2a645a-11f2-11eb-22e9-8f70a459b738
+v
+
 # ╔═╡ 37d4ea5c-f327-11ea-2cc5-e3774c232c2b
 function remove_in_each_row_no_vcat(img, column_numbers)
 	@assert size(img, 1) == length(column_numbers) # same as the number of rows
@@ -159,7 +199,14 @@ function remove_in_each_row_no_vcat(img, column_numbers)
 	for (i, j) in enumerate(column_numbers)
 		# EDIT THE FOLLOWING LINE and split it into two lines
 		# to avoid using `vcat`.
-		img′[i, :] .= vcat(img[i, 1:j-1], img[i, j+1:end])
+		#img′[i, :] .= vcat(img[i, 1:j-1], img[i, j+1:end])
+		
+		## Almost there: Still using a copy, not view.
+		#img′[i, :] .= [img[i, 1:j-1]
+		#	           img[i, j+1:end]]
+		## Correct
+		img′[i, :] = [@view img[i, 1:j-1]
+			          @view img[i, j+1:end]]
 	end
 	img′
 end
@@ -179,9 +226,13 @@ md"""
 👉 How many estimated allocations did this optimization reduce, and how can you explain most of them?
 """
 
+# ╔═╡ 4fa5f906-11f3-11eb-3479-5f0b7393940d
+size(img)
+
 # ╔═╡ e49235a4-f367-11ea-3913-f54a4a6b2d6b
 no_vcat_observation = md"""
-<Your answer here>
+I have not much knowledge in computer science, but, as one can observe, **the number of `allocs estimate`**
+drops from $1029$ to $345.\;$ `img` has $342$ rows and $1029 - 345 = 684 = 342 \times 2\,.$
 """
 
 # ╔═╡ 837c43a4-f368-11ea-00a3-990a45cb0cbd
@@ -194,6 +245,15 @@ md"""
 Pluto will automatically time your change with `@benchmark` below.
 """
 
+# ╔═╡ 872ef372-12a8-11eb-1b72-3918ba8d8cf4
+@views
+
+# ╔═╡ 9038960a-12a8-11eb-15af-5fb9a28ec736
+@view
+
+# ╔═╡ 6b5ed7c4-12a9-11eb-314c-df14641f2f92
+
+
 # ╔═╡ 90a22cc6-f327-11ea-1484-7fda90283797
 function remove_in_each_row_views(img, column_numbers)
 	@assert size(img, 1) == length(column_numbers) # same as the number of rows
@@ -203,7 +263,8 @@ function remove_in_each_row_views(img, column_numbers)
 	for (i, j) in enumerate(column_numbers)
 		# EDIT THE FOLLOWING LINE and split it into two lines
 		# to avoid using `vcat`.
-		img′[i, :] .= vcat(img[i, 1:j-1], img[i, j+1:end])
+		img′[i, 1:j-1] = @view img[i, 1:j-1]
+		img′[i, j:end] = @view img[i, j+1:end]
 	end
 	img′
 end
@@ -240,6 +301,17 @@ Nice! If you did your optimizations right, you should be able to get down the es
 views_observation = md"""
 <your answer here>
 """
+
+# ╔═╡ fc1fbeec-12a9-11eb-34ae-a14eb0b5b03e
+md"
+**(?1)** If your answer to Exercise 1.3 were correct, how can you explain `allocs estimate = 3` here?
+"
+
+# ╔═╡ 2a4ab6b2-12aa-11eb-226d-01d3f5ee6c9d
+md"
+### Stopped here (2020/10/20 15h00)
+
+"
 
 # ╔═╡ 318a2256-f369-11ea-23a9-2f74c566549b
 md"""
@@ -640,17 +712,6 @@ if shrink_greedy
 	greedy_carved[greedy_n]
 end
 
-# ╔═╡ d88bc272-f392-11ea-0efd-15e0e2b2cd4e
-if shrink_recursive
-	recursive_carved = shrink_n(pika, 3, recursive_seam)
-	md"Shrink by: $(@bind recursive_n Slider(1:3, show_value=true))"
-end
-
-# ╔═╡ e66ef06a-f392-11ea-30ab-7160e7723a17
-if shrink_recursive
-	recursive_carved[recursive_n]
-end
-
 # ╔═╡ 4e3ef866-f3c5-11ea-3fb0-27d1ca9a9a3f
 if shrink_dict
 	dict_carved = shrink_n(img, 200, recursive_memoized_seam)
@@ -707,6 +768,17 @@ if compute_access
 	tracked = track_access(energy(pika))
 	least_energy(tracked, 1,7)
 	tracked.accesses[]
+end
+
+# ╔═╡ d88bc272-f392-11ea-0efd-15e0e2b2cd4e
+if shrink_recursive
+	recursive_carved = shrink_n(pika, 3, recursive_seam)
+	md"Shrink by: $(@bind recursive_n Slider(1:3, show_value=true))"
+end
+
+# ╔═╡ e66ef06a-f392-11ea-30ab-7160e7723a17
+if shrink_recursive
+	recursive_carved[recursive_n]
 end
 
 # ╔═╡ ffc17f40-f380-11ea-30ee-0fe8563c0eb1
@@ -840,25 +912,41 @@ bigbreak
 # ╠═86e1ee96-f314-11ea-03f6-0f549b79e7c9
 # ╠═a4937996-f314-11ea-2ff9-615c888afaa8
 # ╠═0d144802-f319-11ea-0028-cd97a776a3d0
+# ╠═78f3d1ba-11ef-11eb-1385-032119a54ee9
 # ╟─cc9fcdae-f314-11ea-1b9a-1f68b792f005
 # ╟─b49a21a6-f381-11ea-1a98-7f144c55c9b7
 # ╟─b49e8cc8-f381-11ea-1056-91668ac6ae4e
+# ╠═5d9c9270-11f0-11eb-14e8-6f5ffe7a6c41
+# ╠═6882bbd8-11f0-11eb-1c83-7f4c929d60fb
+# ╠═45bccee0-11f0-11eb-0689-7b83f464a92b
+# ╠═fe46cf3a-11f0-11eb-120a-6d9d66f001da
+# ╠═a12da3b2-11f0-11eb-3d19-c994afe71784
+# ╠═e208b2dc-11f0-11eb-3b7a-af3a6a318ccf
+# ╠═61679010-1352-11eb-3f62-8168365de821
 # ╠═e799be82-f317-11ea-3ae4-6d13ece3fe10
 # ╟─c075a8e6-f382-11ea-2263-cd9507324f4f
+# ╠═d5e2178a-1358-11eb-2fea-9104a63e4f80
+# ╠═f7a945d4-1358-11eb-0c6f-87875e89bbb7
 # ╠═9cced1a8-f326-11ea-0759-0b2f22e5a1db
 # ╟─c086bd1e-f384-11ea-3b26-2da9e24360ca
 # ╟─1d893998-f366-11ea-0828-512de0c44915
 # ╟─59991872-f366-11ea-1036-afe313fb4ec1
 # ╠═e501ea28-f326-11ea-252a-53949fd9ef57
 # ╟─f7915918-f366-11ea-2c46-2f4671ae8a22
+# ╠═10eae3b2-11f2-11eb-281d-cf3d2ae95068
+# ╠═2e2a645a-11f2-11eb-22e9-8f70a459b738
 # ╠═37d4ea5c-f327-11ea-2cc5-e3774c232c2b
 # ╠═67717d02-f327-11ea-0988-bfe661f57f77
 # ╟─9e149cd2-f367-11ea-28ef-b9533e8a77bb
 # ╟─e3519118-f387-11ea-0c61-e1c2de1c24c1
 # ╟─ba1619d4-f389-11ea-2b3f-fd9ba71cf7e3
-# ╠═e49235a4-f367-11ea-3913-f54a4a6b2d6b
+# ╠═4fa5f906-11f3-11eb-3479-5f0b7393940d
+# ╟─e49235a4-f367-11ea-3913-f54a4a6b2d6b
 # ╟─145c0f58-f384-11ea-2b71-09ae83f66da2
 # ╟─837c43a4-f368-11ea-00a3-990a45cb0cbd
+# ╠═872ef372-12a8-11eb-1b72-3918ba8d8cf4
+# ╠═9038960a-12a8-11eb-15af-5fb9a28ec736
+# ╠═6b5ed7c4-12a9-11eb-314c-df14641f2f92
 # ╠═90a22cc6-f327-11ea-1484-7fda90283797
 # ╠═3335e07c-f328-11ea-0e6c-8d38c8c0ad5b
 # ╟─d4ea4222-f388-11ea-3c8d-db0d651f5282
@@ -867,8 +955,10 @@ bigbreak
 # ╟─dc63d32a-f387-11ea-37e2-6f3666a72e03
 # ╟─7eaa57d2-f368-11ea-1a70-c7c7e54bd0b1
 # ╠═fd819dac-f368-11ea-33bb-17148387546a
+# ╟─fc1fbeec-12a9-11eb-34ae-a14eb0b5b03e
 # ╟─d7a9c000-f383-11ea-1516-cf71102d8e94
 # ╟─8d558c4c-f328-11ea-0055-730ead5d5c34
+# ╟─2a4ab6b2-12aa-11eb-226d-01d3f5ee6c9d
 # ╟─318a2256-f369-11ea-23a9-2f74c566549b
 # ╟─7a44ba52-f318-11ea-0406-4731c80c1007
 # ╠═6c7e4b54-f318-11ea-2055-d9f9c0199341
