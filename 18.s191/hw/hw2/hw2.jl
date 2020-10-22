@@ -187,9 +187,6 @@ While using `vcat` might make it easy to write the first version of our function
 # ╔═╡ 10eae3b2-11f2-11eb-281d-cf3d2ae95068
 1:10 + 12:20
 
-# ╔═╡ 2e2a645a-11f2-11eb-22e9-8f70a459b738
-v
-
 # ╔═╡ 37d4ea5c-f327-11ea-2cc5-e3774c232c2b
 function remove_in_each_row_no_vcat(img, column_numbers)
 	@assert size(img, 1) == length(column_numbers) # same as the number of rows
@@ -299,12 +296,21 @@ Nice! If you did your optimizations right, you should be able to get down the es
 
 # ╔═╡ fd819dac-f368-11ea-33bb-17148387546a
 views_observation = md"""
-<your answer here>
+I do not know how to explain why exactly `3 allocs estimate` is left, but from our 2nd result of `345 allocs` down to `3 allocs` it can seem to be explained by the fact that
+> By using entirely **`@view`** we avoided another `342` allocations (i.e. $345 - 342 = 3$), which is the number of rows in the matrix (i.e. `size(img, 1)` equals `342`). The reduction of `342` allocations might be due to the fact that, in the 2nd implementation, we've allocated one new array for each row, resulting to exactly `342` allocations.
 """
 
 # ╔═╡ fc1fbeec-12a9-11eb-34ae-a14eb0b5b03e
 md"
 **(?1)** If your answer to Exercise 1.3 were correct, how can you explain `allocs estimate = 3` here?
+"
+
+# ╔═╡ a1dc747e-142e-11eb-252e-6722818c93e2
+md"
+**(R1)** I am not sure about this, but one possible answer could be
+_The number $3$ in the remaining number of allocations comes from_
+- `m, n = size(img)`, which contributes $2$ allocations
+- `img\prime = similar(img, m, n-1)`, which gives $1$ allocation 
 "
 
 # ╔═╡ 2a4ab6b2-12aa-11eb-226d-01d3f5ee6c9d
@@ -934,7 +940,6 @@ bigbreak
 # ╠═e501ea28-f326-11ea-252a-53949fd9ef57
 # ╟─f7915918-f366-11ea-2c46-2f4671ae8a22
 # ╠═10eae3b2-11f2-11eb-281d-cf3d2ae95068
-# ╠═2e2a645a-11f2-11eb-22e9-8f70a459b738
 # ╠═37d4ea5c-f327-11ea-2cc5-e3774c232c2b
 # ╠═67717d02-f327-11ea-0988-bfe661f57f77
 # ╟─9e149cd2-f367-11ea-28ef-b9533e8a77bb
@@ -954,8 +959,9 @@ bigbreak
 # ╟─4f0975d8-f329-11ea-3d10-59a503f8d6b2
 # ╟─dc63d32a-f387-11ea-37e2-6f3666a72e03
 # ╟─7eaa57d2-f368-11ea-1a70-c7c7e54bd0b1
-# ╠═fd819dac-f368-11ea-33bb-17148387546a
+# ╟─fd819dac-f368-11ea-33bb-17148387546a
 # ╟─fc1fbeec-12a9-11eb-34ae-a14eb0b5b03e
+# ╟─a1dc747e-142e-11eb-252e-6722818c93e2
 # ╟─d7a9c000-f383-11ea-1516-cf71102d8e94
 # ╟─8d558c4c-f328-11ea-0055-730ead5d5c34
 # ╟─2a4ab6b2-12aa-11eb-226d-01d3f5ee6c9d
