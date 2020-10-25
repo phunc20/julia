@@ -309,8 +309,8 @@ md"
 md"
 **(R1)** I am not sure about this, but one possible answer could be
 _The number $3$ in the remaining number of allocations comes from_
-- `m, n = size(img)`, which contributes $2$ allocations
-- `img\prime = similar(img, m, n-1)`, which gives $1$ allocation 
+- `m, n = size(img)`, which contributes to $2$ allocations
+- `img\prime = similar(img, m, n-1)`, which gives rise to $1$ allocation 
 "
 
 # ╔═╡ 2a4ab6b2-12aa-11eb-226d-01d3f5ee6c9d
@@ -340,6 +340,18 @@ end
 # ╔═╡ 74059d04-f319-11ea-29b4-85f5f8f5c610
 Gray.(brightness.(img))
 
+# ╔═╡ cf99813e-1430-11eb-1c86-055f4f4dcbf2
+typeof(img)
+
+# ╔═╡ c860e7c4-1430-11eb-31c8-537a4d285e56
+brightness.(img)
+
+# ╔═╡ 1b3f2616-1431-11eb-3395-9f439bc589e4
+size(brightness.(img))
+
+# ╔═╡ 24748b2a-1431-11eb-0589-4bb7057d91e9
+typeof(brightness.(img))
+
 # ╔═╡ 0b9ead92-f318-11ea-3744-37150d649d43
 md"""We provide you with a convolve function below.
 """
@@ -349,8 +361,23 @@ convolve(img, k) = imfilter(img, reflect(k)) # uses ImageFiltering.jl package
 # behaves the same way as the `convolve` function used in Lecture 2
 # You were asked to implement this in homework 1.
 
+# ╔═╡ 55c346d4-1434-11eb-0a45-a7e5d1fb8a0e
+md"
+**(?2)** Was this the reason why my python implementation got slower? I mean, I know Python is said to be slower than Julia, but did I write an even slower implementation just because I had not used a library function to do the convolution?
+
+"
+
 # ╔═╡ cdfb3508-f319-11ea-1486-c5c58a0b9177
 float_to_color(x) = RGB(max(0, -x), max(0, x), 0)
+
+# ╔═╡ 68eb9e1c-1431-11eb-03ba-27dbaeec708b
+md"
+A little explanation might come in handy: `float_to_color()`, when applied to a matrix of real numbers, will output to the pixel in question
+- **red** if $x < 0$
+- **green** if $x > 0$
+- **black** if $x = 0$
+
+"
 
 # ╔═╡ 5fccc7cc-f369-11ea-3b9e-2f0eca7f0f0e
 md"""
@@ -369,6 +396,11 @@ end
 
 # ╔═╡ 9fa0cd3a-f3e1-11ea-2f7e-bd73b8e3f302
 float_to_color.(energy(img))
+
+# ╔═╡ 4442740c-1434-11eb-2212-69f4f647fdad
+md"
+### Stopped here (2020/10/22 14h00)
+"
 
 # ╔═╡ 87afabf8-f317-11ea-3cb3-29dced8e265a
 md"""
@@ -969,14 +1001,21 @@ bigbreak
 # ╟─7a44ba52-f318-11ea-0406-4731c80c1007
 # ╠═6c7e4b54-f318-11ea-2055-d9f9c0199341
 # ╠═74059d04-f319-11ea-29b4-85f5f8f5c610
+# ╠═cf99813e-1430-11eb-1c86-055f4f4dcbf2
+# ╠═c860e7c4-1430-11eb-31c8-537a4d285e56
+# ╠═1b3f2616-1431-11eb-3395-9f439bc589e4
+# ╠═24748b2a-1431-11eb-0589-4bb7057d91e9
 # ╟─0b9ead92-f318-11ea-3744-37150d649d43
 # ╠═d184e9cc-f318-11ea-1a1e-994ab1330c1a
+# ╟─55c346d4-1434-11eb-0a45-a7e5d1fb8a0e
 # ╠═cdfb3508-f319-11ea-1486-c5c58a0b9177
+# ╟─68eb9e1c-1431-11eb-03ba-27dbaeec708b
 # ╠═f010933c-f318-11ea-22c5-4d2e64cd9629
 # ╟─5fccc7cc-f369-11ea-3b9e-2f0eca7f0f0e
 # ╠═6f37b34c-f31a-11ea-2909-4f2079bf66ec
 # ╠═9fa0cd3a-f3e1-11ea-2f7e-bd73b8e3f302
 # ╟─f7eba2b6-f388-11ea-06ad-0b861c764d61
+# ╟─4442740c-1434-11eb-2212-69f4f647fdad
 # ╟─87afabf8-f317-11ea-3cb3-29dced8e265a
 # ╟─8ba9f5fc-f31b-11ea-00fe-79ecece09c25
 # ╟─f5a74dfc-f388-11ea-2577-b543d31576c6
