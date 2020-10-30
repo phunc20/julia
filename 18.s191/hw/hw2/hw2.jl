@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.11.14
+# v0.12.4
 
 using Markdown
 using InteractiveUtils
@@ -315,7 +315,7 @@ _The number $3$ in the remaining number of allocations comes from_
 
 # ╔═╡ 2a4ab6b2-12aa-11eb-226d-01d3f5ee6c9d
 md"
-### Stopped here (2020/10/20 15h00)
+##### Stopped here (2020/10/20 15h00)
 
 "
 
@@ -438,10 +438,164 @@ md"""
 # ╔═╡ 2f9cbea8-f3a1-11ea-20c6-01fd1464a592
 random_seam(m, n, i) = reduce((a, b) -> [a..., clamp(last(a) + rand(-1:1), 1, n)], 1:m-1; init=[i])
 
-# ╔═╡ abf20aa0-f31b-11ea-2548-9bea4fab4c37
-function greedy_seam(energies, starting_pixel::Int)
+# ╔═╡ bee2cd68-1819-11eb-25b7-17ba8d35c618
+md"
+Example usage of `reduce()`
+```julia
+julia> reduce(*, [2,3,4])
+24
+
+julia> reduce(*, [2,3,4], init=-1)
+-24
+
+julia> reduce(*, [2,3,4], init=0)
+0
+
+julia> reduce(*, [2,3,4], init=10)
+240
+```
+"
+
+# ╔═╡ 83485c0e-181a-11eb-03f2-092b709aee11
+md"
+```
+  clamp(x, lo, hi)
+
+  Return x if lo <= x <= hi. If x > hi, return hi. If x < lo, return lo. Arguments are promoted to a common type.
+
+  Examples
+  ≡≡≡≡≡≡≡≡≡≡
+
+  julia> clamp.([pi, 1.0, big(10.)], 2., 9.)
+  3-element Array{BigFloat,1}:
+   3.141592653589793238462643383279502884197169399375105820974944592307816406286198
+   2.0
+   9.0
+
+  julia> clamp.([11,8,5],10,6) # an example where lo > hi
+  3-element Array{Int64,1}:
+    6
+    6
+   10
+
+  ────────────────────────────────────────────────────────────────────────────────
+
+  clamp(x, T)::T
+
+  Clamp x between typemin(T) and typemax(T) and convert the result to type T.
+
+  Examples
+  ≡≡≡≡≡≡≡≡≡≡
+
+  julia> clamp(200, Int8)
+  127
+  julia> clamp(-200, Int8)
+  -128
+```
+"
+
+# ╔═╡ dcef1ac8-1819-11eb-0c1e-db26b5a8e1e4
+md"
+Although not sure, I guess the `a...` is somewhat like the expansion of an arg in Python, i.e. `func(*a)` or `func(**a)`.
+"
+
+# ╔═╡ 906c19ce-181b-11eb-0ceb-f9e865370ff6
+# Try execute this cell several times
+random_seam(3,5,1)
+
+# ╔═╡ b7d6e060-181c-11eb-35fe-fbb0403eea33
+md"##### Why it seems so hard to understand the function `random_seam(m,n,i)`?"
+
+# ╔═╡ 4203de1a-181c-11eb-01af-9346d45b84c8
+md"
+```
+  The \"splat\" operator, ..., represents a sequence of arguments. ... can be used in function definitions, to indicate that
+  the function accepts an arbitrary number of arguments. ... can also be used to apply a function to a sequence of
+  arguments.
+
+  Examples
+  ≡≡≡≡≡≡≡≡≡≡
+
+  julia> add(xs...) = reduce(+, xs)
+  add (generic function with 1 method)
+
+  julia> add(1, 2, 3, 4, 5)
+  15
+
+  julia> add([1, 2, 3]...)
+  6
+
+  julia> add(7, 1:100..., 1000:1100...)
+  111107
+```
+"
+
+# ╔═╡ 8a86c3c2-185e-11eb-0897-75b86e077626
+md"
+![note](random_seam.png)
+"
+
+# ╔═╡ e9901e6e-185f-11eb-186a-1b7d2631ce1e
+md"
+![note](/home/phunc20/git-repos/phunc20/julia/18.s191/hw/hw2/random_seam.png)
+"
+
+# ╔═╡ ffd1a970-185f-11eb-366e-032136beee0d
+md"
+![note](~/git-repos/phunc20/julia/18.s191/hw/hw2/random_seam.png)
+"
+
+# ╔═╡ 96b925bc-1869-11eb-385a-d36fbad5aa76
+md"
+![note](./git-repos/phunc20/julia/18.s191/hw/hw2/random_seam.png)
+"
+
+# ╔═╡ 7c419cc8-185f-11eb-089d-85bb746fdcbf
+html"
+<img src=\"random_seam.png\" />
+"
+
+# ╔═╡ 5af26608-183a-11eb-258d-57a6ce49deda
+function gggreedy_seam(energies, starting_pixel::Int)
 	# you can delete the body of this function - it's just a placeholder.
 	random_seam(size(energies)..., starting_pixel)
+end
+
+# ╔═╡ d73647c8-1837-11eb-21ca-cd01dd92b809
+function greedy_seam(energies, starting_pixel::Int)
+	# you can delete the body of this function - it's just a placeholder.
+	#random_seam(size(energies)..., starting_pixel)
+	## It's hard to use reduce(), isn't it?
+	#reduce(, 2:m-1 ; init=[starting_pixel])
+	## normal way of doing it
+	#local m, n  = size(energies)
+	m, n  = size(energies)
+	#cols = zeros(Int, m)
+	#cols = zeros(Int, 1)
+	cols = [starting_pixel]
+	#indices = 
+	#values_
+	for row in 2:m
+		center = last(cols)
+		left = max(1, center - 1)
+		println(left)
+		if !(left == center)
+			indices = [left, center]
+		else
+			indices = [center]
+		end
+		right = min(n, center + 1)
+		if !(right == center)
+			append!(indices, right)
+		end
+		println(indices)
+		values_ = energies[row, indices]
+		smallest_index = indices[argmin(values_)]
+		#smallest_index = 1
+		#append!(cols, smallest_index)
+		push!(cols, smallest_index)
+	end
+	cols
 end
 
 # ╔═╡ 5430d772-f397-11ea-2ed8-03ee06d02a22
@@ -460,11 +614,22 @@ greedy_test = Gray.(rand(Float64, (8,10)));
 # ╔═╡ 6f52c1a2-f395-11ea-0c8a-138a77f03803
 md"Starting pixel: $(@bind greedy_starting_pixel Slider(1:size(greedy_test, 2); show_value=true))"
 
+# ╔═╡ d2291c76-183a-11eb-1c42-43c569750f5d
+greedy_test
+
 # ╔═╡ 9945ae78-f395-11ea-1d78-cf6ad19606c8
-md"_Let's try it on the bigger image!_"
+md"_Let's try it on a bigger image!_"
 
 # ╔═╡ 87efe4c2-f38d-11ea-39cc-bdfa11298317
 md"Compute shrunk image: $(@bind shrink_greedy CheckBox())"
+
+# ╔═╡ 10ee1470-183b-11eb-13b3-53210ce7ec13
+md"
+##### Stopped here (2020/10/27 17h00)
+- The function `greedy_seam` was not very well written
+- Part of the reason why it is not well written is that I realized I am very bad at the grammar of Julia, or put in another way, the more I code in Julia the more I find I am ignorant of it. I don't know which way is the most optimized.
+"
+
 
 # ╔═╡ 52452d26-f36c-11ea-01a6-313114b4445d
 md"""
@@ -513,7 +678,7 @@ Return these two values in a tuple.
 
 # ╔═╡ 8ec27ef8-f320-11ea-2573-c97b7b908cb7
 ## returns lowest possible sum energy at pixel (i, j), and the column to jump to in row i+1.
-function least_energy(energies, i, j)
+function leasttt_energy(energies, i, j)
 	# base case
 	# if i == something
 	#    return energies[...] # no need for recursive computation in the base case!
@@ -521,6 +686,34 @@ function least_energy(energies, i, j)
 	#
 	# induction
 	# combine results from recursive calls to `least_energy`.
+end
+
+# ╔═╡ eba7143c-1849-11eb-39d9-8f0f6b8f96fe
+## returns lowest possible sum energy at pixel (i, j), and the column to jump to in row i+1.
+function least_energy(energies, i, j)
+	## base case
+	if i == size(energies, 1)
+	   #return (energies[i, j], 1) # no need for recursive computation in the base case!
+	   return energies[i, j] # no need for recursive computation in the base case!
+	end
+	#
+	# induction
+	# combine results from recursive calls to `least_energy`.
+	center = j
+	cols = [center]
+	values_ = [least_energy(energies, i+1, center)[1]]
+	if center > 1
+		left = center - 1
+		push!(cols, left)
+		push!(values_, least_energy(energies, i+1, left)[1])
+	end
+	if center < size(energies, 2)
+		right = center + 1
+		push!(cols, right)
+		push!(values_, least_energy(energies, i+1, right)[1])
+	end
+	index = argmin(values_)
+	return energies[i, j] + values_[index], cols[index]
 end
 
 # ╔═╡ a7f3d9f8-f3bb-11ea-0c1a-55bbb8408f09
@@ -546,6 +739,11 @@ begin
 	Base.setindex!(x::AccessTrackerArray, v, i...) = (x.accesses[] += 1; x.data[i...] = v;)
 end
 
+# ╔═╡ f944397a-184f-11eb-2c40-d72845a3b2b5
+md"
+##### Stopped here (2020/10/27 19h30)
+"
+
 # ╔═╡ 8bc930f0-f372-11ea-06cb-79ced2834720
 md"""
 #### Exercise 2.3 - _Exhaustive search with recursion_
@@ -556,14 +754,31 @@ This will give you the method used in the lecture to perform [exhaustive search 
 """
 
 # ╔═╡ 85033040-f372-11ea-2c31-bb3147de3c0d
-function recursive_seam(energies, starting_pixel)
+function recursive_seammm(energies, starting_pixel)
 	m, n = size(energies)
 	# Replace the following line with your code.
 	[rand(1:starting_pixel) for i=1:m]
 end
 
+# ╔═╡ fa201006-1928-11eb-2128-dbba6f24375c
+function recursive_seam(energies, starting_pixel)
+	m, n = size(energies)
+	prev_col = starting_pixel
+	seam = [starting_pixel]
+	for current_row = 2:m
+		prev_row = current_row - 1
+		current_col = least_energy(energies, prev_row, prev_col)[2]
+		push!(seam, current_col)
+		prev_col = current_col
+	end
+	return seam
+end
+
 # ╔═╡ 1d55333c-f393-11ea-229a-5b1e9cabea6a
 md"Compute shrunk image: $(@bind shrink_recursive CheckBox())"
+
+# ╔═╡ 0d72a340-19aa-11eb-297d-f1472e1c991a
+shrink_recursive
 
 # ╔═╡ c572f6ce-f372-11ea-3c9a-e3a21384edca
 md"""
@@ -796,7 +1011,8 @@ end
 
 # ╔═╡ ddba07dc-f3b7-11ea-353e-0f67713727fc
 # Do not make this image bigger, it will be infeasible to compute.
-pika = decimate(load(download("https://art.pixilart.com/901d53bcda6b27b.png")),150)
+#pika = decimate(load(download("https://art.pixilart.com/901d53bcda6b27b.png")),150)
+pika = decimate(load("pika.png"),150)
 
 # ╔═╡ 73b52fd6-f3b9-11ea-14ed-ebfcab1ce6aa
 size(pika)
@@ -818,6 +1034,12 @@ end
 if shrink_recursive
 	recursive_carved[recursive_n]
 end
+
+# ╔═╡ 6358aa5c-19aa-11eb-3c9b-c589ef5874b9
+recursive_carved
+
+# ╔═╡ 7f91e8e6-19aa-11eb-112b-cf8ff4d60ecc
+pika
 
 # ╔═╡ ffc17f40-f380-11ea-30ee-0fe8563c0eb1
 hint(text) = Markdown.MD(Markdown.Admonition("hint", "Hint", [text]))
@@ -941,6 +1163,42 @@ bigbreak
 # ╔═╡ 48089a00-f321-11ea-1479-e74ba71df067
 bigbreak
 
+# ╔═╡ 927e6c3e-183a-11eb-3809-c95e2327bd19
+##function greedy_seam(energies, starting_pixel::Int)
+#	# you can delete the body of this function - it's just a placeholder.
+#	#random_seam(size(energies)..., starting_pixel)
+#	## It's hard to use reduce(), isn't it?
+#	#reduce(, 2:m-1 ; init=[starting_pixel])
+#	## normal way of doing it
+#	#local m, n  = size(energies)
+#	m, n  = size(energies)
+#	#cols = zeros(Int, m)
+#	#cols = zeros(Int, 1)
+#	cols = [starting_pixel]
+#	#indices = 
+#	#values_
+#	for row in 2:m
+#		center = last(cols)
+#		left = max(1, center - 1)
+#		println(left)
+#		if !(left == center)
+#			indices = [left, center]
+#		else
+#			indices = [center]
+#		end
+#		right = min(n, center + 1)
+#		if !(right == center)
+#			append!(indices, right)
+#		end
+#		println(indices)
+#		values_ = energies[row, indices]
+#		smallest_index = indices[argmin(values)]
+#		#smallest_index = 1
+#		append!(cols, smallest_index)
+#	end
+#	cols
+#end
+
 # ╔═╡ Cell order:
 # ╟─e6b6760a-f37f-11ea-3ae1-65443ef5a81a
 # ╟─ec66314e-f37f-11ea-0af4-31da0584e881
@@ -996,7 +1254,7 @@ bigbreak
 # ╟─a1dc747e-142e-11eb-252e-6722818c93e2
 # ╟─d7a9c000-f383-11ea-1516-cf71102d8e94
 # ╟─8d558c4c-f328-11ea-0055-730ead5d5c34
-# ╟─2a4ab6b2-12aa-11eb-226d-01d3f5ee6c9d
+# ╠═2a4ab6b2-12aa-11eb-226d-01d3f5ee6c9d
 # ╟─318a2256-f369-11ea-23a9-2f74c566549b
 # ╟─7a44ba52-f318-11ea-0406-4731c80c1007
 # ╠═6c7e4b54-f318-11ea-2055-d9f9c0199341
@@ -1020,18 +1278,32 @@ bigbreak
 # ╟─8ba9f5fc-f31b-11ea-00fe-79ecece09c25
 # ╟─f5a74dfc-f388-11ea-2577-b543d31576c6
 # ╟─c3543ea4-f393-11ea-39c8-37747f113b96
-# ╟─2f9cbea8-f3a1-11ea-20c6-01fd1464a592
-# ╠═abf20aa0-f31b-11ea-2548-9bea4fab4c37
+# ╠═2f9cbea8-f3a1-11ea-20c6-01fd1464a592
+# ╟─bee2cd68-1819-11eb-25b7-17ba8d35c618
+# ╟─83485c0e-181a-11eb-03f2-092b709aee11
+# ╟─dcef1ac8-1819-11eb-0c1e-db26b5a8e1e4
+# ╠═906c19ce-181b-11eb-0ceb-f9e865370ff6
+# ╟─b7d6e060-181c-11eb-35fe-fbb0403eea33
+# ╟─4203de1a-181c-11eb-01af-9346d45b84c8
+# ╠═8a86c3c2-185e-11eb-0897-75b86e077626
+# ╠═e9901e6e-185f-11eb-186a-1b7d2631ce1e
+# ╠═ffd1a970-185f-11eb-366e-032136beee0d
+# ╠═96b925bc-1869-11eb-385a-d36fbad5aa76
+# ╠═7c419cc8-185f-11eb-089d-85bb746fdcbf
+# ╠═5af26608-183a-11eb-258d-57a6ce49deda
+# ╠═d73647c8-1837-11eb-21ca-cd01dd92b809
 # ╟─5430d772-f397-11ea-2ed8-03ee06d02a22
 # ╟─f580527e-f397-11ea-055f-bb9ea8f12015
-# ╟─6f52c1a2-f395-11ea-0c8a-138a77f03803
-# ╟─2a7e49b8-f395-11ea-0058-013e51baa554
-# ╟─7ddee6fc-f394-11ea-31fc-5bd665a65bef
+# ╠═6f52c1a2-f395-11ea-0c8a-138a77f03803
+# ╠═d2291c76-183a-11eb-1c42-43c569750f5d
+# ╠═2a7e49b8-f395-11ea-0058-013e51baa554
+# ╠═7ddee6fc-f394-11ea-31fc-5bd665a65bef
 # ╟─980b1104-f394-11ea-0948-21002f26ee25
 # ╟─9945ae78-f395-11ea-1d78-cf6ad19606c8
 # ╟─87efe4c2-f38d-11ea-39cc-bdfa11298317
-# ╟─f6571d86-f388-11ea-0390-05592acb9195
-# ╟─f626b222-f388-11ea-0d94-1736759b5f52
+# ╠═f6571d86-f388-11ea-0390-05592acb9195
+# ╠═f626b222-f388-11ea-0d94-1736759b5f52
+# ╟─10ee1470-183b-11eb-13b3-53210ce7ec13
 # ╟─52452d26-f36c-11ea-01a6-313114b4445d
 # ╠═2a98f268-f3b6-11ea-1eea-81c28256a19e
 # ╟─32e9a944-f3b6-11ea-0e82-1dff6c2eef8d
@@ -1039,19 +1311,25 @@ bigbreak
 # ╠═ddba07dc-f3b7-11ea-353e-0f67713727fc
 # ╠═73b52fd6-f3b9-11ea-14ed-ebfcab1ce6aa
 # ╠═8ec27ef8-f320-11ea-2573-c97b7b908cb7
+# ╠═eba7143c-1849-11eb-39d9-8f0f6b8f96fe
 # ╟─9f18efe2-f38e-11ea-0871-6d7760d0b2f6
 # ╟─a7f3d9f8-f3bb-11ea-0c1a-55bbb8408f09
-# ╟─fa8e2772-f3b6-11ea-30f7-699717693164
+# ╠═fa8e2772-f3b6-11ea-30f7-699717693164
 # ╟─18e0fd8a-f3bc-11ea-0713-fbf74d5fa41a
 # ╟─cbf29020-f3ba-11ea-2cb0-b92836f3d04b
+# ╟─f944397a-184f-11eb-2c40-d72845a3b2b5
 # ╟─8bc930f0-f372-11ea-06cb-79ced2834720
 # ╠═85033040-f372-11ea-2c31-bb3147de3c0d
+# ╠═fa201006-1928-11eb-2128-dbba6f24375c
 # ╠═1d55333c-f393-11ea-229a-5b1e9cabea6a
+# ╠═0d72a340-19aa-11eb-297d-f1472e1c991a
 # ╠═d88bc272-f392-11ea-0efd-15e0e2b2cd4e
 # ╠═e66ef06a-f392-11ea-30ab-7160e7723a17
+# ╠═6358aa5c-19aa-11eb-3c9b-c589ef5874b9
+# ╠═7f91e8e6-19aa-11eb-112b-cf8ff4d60ecc
 # ╟─c572f6ce-f372-11ea-3c9a-e3a21384edca
 # ╠═6d993a5c-f373-11ea-0dde-c94e3bbd1552
-# ╠═ea417c2a-f373-11ea-3bb0-b1b5754f2fac
+# ╟─ea417c2a-f373-11ea-3bb0-b1b5754f2fac
 # ╟─56a7f954-f374-11ea-0391-f79b75195f4d
 # ╠═b1d09bc8-f320-11ea-26bb-0101c9a204e2
 # ╠═3e8b0868-f3bd-11ea-0c15-011bbd6ac051
@@ -1091,3 +1369,4 @@ bigbreak
 # ╟─fbf6b0fa-f3e0-11ea-2009-573a218e2460
 # ╟─256edf66-f3e1-11ea-206e-4f9b4f6d3a3d
 # ╟─00115b6e-f381-11ea-0bc6-61ca119cb628
+# ╠═927e6c3e-183a-11eb-3809-c95e2327bd19
