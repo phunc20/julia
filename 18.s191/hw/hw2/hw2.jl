@@ -563,8 +563,6 @@ end
 
 # ╔═╡ d73647c8-1837-11eb-21ca-cd01dd92b809
 function greedy_seam(energies, starting_pixel::Int)
-	# you can delete the body of this function - it's just a placeholder.
-	#random_seam(size(energies)..., starting_pixel)
 	## It's hard to use reduce(), isn't it?
 	#reduce(, 2:m-1 ; init=[starting_pixel])
 	## normal way of doing it
@@ -586,7 +584,8 @@ function greedy_seam(energies, starting_pixel::Int)
 		end
 		right = min(n, center + 1)
 		if !(right == center)
-			append!(indices, right)
+			#append!(indices, right)
+			push!(indices, right)
 		end
 		println(indices)
 		values_ = energies[row, indices]
@@ -696,7 +695,7 @@ function least_energy(energies, i, j)
 	   #return (energies[i, j], 1) # no need for recursive computation in the base case!
 	   return energies[i, j] # no need for recursive computation in the base case!
 	end
-	#
+
 	# induction
 	# combine results from recursive calls to `least_energy`.
 	center = j
@@ -739,6 +738,15 @@ begin
 	Base.setindex!(x::AccessTrackerArray, v, i...) = (x.accesses[] += 1; x.data[i...] = v;)
 end
 
+# ╔═╡ 99662410-1aa6-11eb-214a-57a0c0c1eb09
+md"
+**(?3)**
+Can a `number` be viewed as an array and thus be indexed?
+"
+
+# ╔═╡ 8c16ad0c-1aa6-11eb-1f31-07741437eabf
+3.14[1]
+
 # ╔═╡ f944397a-184f-11eb-2c40-d72845a3b2b5
 md"
 ##### Stopped here (2020/10/27 19h30)
@@ -768,7 +776,8 @@ function recursive_seam(energies, starting_pixel)
 	for current_row = 2:m
 		prev_row = current_row - 1
 		current_col = least_energy(energies, prev_row, prev_col)[2]
-		push!(seam, current_col)
+		#push!(seam, current_col)
+		push!(seam, copy(current_col))
 		prev_col = current_col
 	end
 	return seam
@@ -824,21 +833,72 @@ You are expected to read and understand the [documentation on dictionaries](http
 """
 
 # ╔═╡ b1d09bc8-f320-11ea-26bb-0101c9a204e2
-function memoized_least_energy(energies, i, j, memory)
+function memoized_least_energyyyy(energies, i, j, memory)
 	m, n = size(energies)
 	
 	# Replace the following line with your code.
 	[starting_pixel for i=1:m]
 end
 
+# ╔═╡ f8ce73e8-1ac5-11eb-0c1b-83943816ebc5
+function memoized_least_energy(energies, i, j, memory)
+	m, n = size(energies)
+
+	# Replace the following line with your code.
+	get!(memory, (i, j),
+		if i == m
+			# get memory[(i, j)] if exists; otherwise, return energies[i, j] and, in the mean time,
+			# store that value to memory[(i, j)]
+			#get!(memory, (i, j), energies[i, j])
+			energies[i, j]
+		else
+			center = j
+			cols = [center]
+			values_ =  [get!(memory, (i+1, center), memoized_least_energy(energies, i+1, center, memory)[1])]
+			if center > 1
+				left = center - 1
+				push!(cols, left)
+				push!(values_, get!(memory, (i+1, left), memoized_least_energy(energies, i+1, left, memory)[1]))
+			end
+			if center < n
+				right = center + 1
+				push!(cols, right)
+				push!(values_, get!(memory, (i+1, right), memoized_least_energy(energies, i+1, right, memory)[1]))
+			end
+			v_min, i_min = findmin(values_)
+			#energies[i, j] + values_[i_min], cols[i_min]
+			energies[i, j] + values_[i_min]
+		end
+	)
+end
+
+
 # ╔═╡ 3e8b0868-f3bd-11ea-0c15-011bbd6ac051
-function recursive_memoized_seam(energies, starting_pixel)
+function recursive_memoized_seammm(energies, starting_pixel)
 	memory = Dict{Tuple{Int,Int}, Float64}() # location => least energy.
 	                                         # pass this every time you call memoized_least_energy.
 	m, n = size(energies)
 	
 	# Replace the following line with your code.
 	[rand(1:starting_pixel) for i=1:m]
+end
+
+# ╔═╡ 0aca395e-1acd-11eb-36ba-f72bd2bab4a6
+function recursive_memoized_seam(energies, starting_pixel)
+	memory = Dict{Tuple{Int,Int}, Float64}() # location => least energy.
+	                                         # pass this every time you call memoized_least_energy.
+	m, n = size(energies)
+
+	# Replace the following line with your code.
+	prev_col = starting_pixel
+	seam = [starting_pixel]
+	for current_row = 2:m
+		prev_row = current_row - 1
+		current_col = memoized_least_energy(energies, prev_row, prev_col, memory)[2]
+		push!(seam, current_col)
+		prev_col = current_col
+	end
+	seam
 end
 
 # ╔═╡ 4e3bcf88-f3c5-11ea-3ada-2ff9213647b7
@@ -942,6 +1002,7 @@ function shrink_n(img, n, min_seam, imgs=[]; show_lightning=true)
 	n==0 && return push!(imgs, img)
 
 	e = energy(img)
+	# Define a new function `seam_energy()`
 	seam_energy(seam) = sum(e[i, seam[i]]  for i in 1:size(img, 1))
 	_, min_j = findmin(map(j->seam_energy(min_seam(e, j)), 1:size(e, 2)))
 	min_seam_vec = min_seam(e, min_j)
@@ -1012,7 +1073,7 @@ end
 # ╔═╡ ddba07dc-f3b7-11ea-353e-0f67713727fc
 # Do not make this image bigger, it will be infeasible to compute.
 #pika = decimate(load(download("https://art.pixilart.com/901d53bcda6b27b.png")),150)
-pika = decimate(load("pika.png"),150)
+pika = decimate(load("pika.png"), 150)
 
 # ╔═╡ 73b52fd6-f3b9-11ea-14ed-ebfcab1ce6aa
 size(pika)
@@ -1317,6 +1378,8 @@ bigbreak
 # ╠═fa8e2772-f3b6-11ea-30f7-699717693164
 # ╟─18e0fd8a-f3bc-11ea-0713-fbf74d5fa41a
 # ╟─cbf29020-f3ba-11ea-2cb0-b92836f3d04b
+# ╟─99662410-1aa6-11eb-214a-57a0c0c1eb09
+# ╠═8c16ad0c-1aa6-11eb-1f31-07741437eabf
 # ╟─f944397a-184f-11eb-2c40-d72845a3b2b5
 # ╟─8bc930f0-f372-11ea-06cb-79ced2834720
 # ╠═85033040-f372-11ea-2c31-bb3147de3c0d
@@ -1332,7 +1395,9 @@ bigbreak
 # ╟─ea417c2a-f373-11ea-3bb0-b1b5754f2fac
 # ╟─56a7f954-f374-11ea-0391-f79b75195f4d
 # ╠═b1d09bc8-f320-11ea-26bb-0101c9a204e2
+# ╠═f8ce73e8-1ac5-11eb-0c1b-83943816ebc5
 # ╠═3e8b0868-f3bd-11ea-0c15-011bbd6ac051
+# ╠═0aca395e-1acd-11eb-36ba-f72bd2bab4a6
 # ╠═4e3bcf88-f3c5-11ea-3ada-2ff9213647b7
 # ╠═4e3ef866-f3c5-11ea-3fb0-27d1ca9a9a3f
 # ╠═6e73b1da-f3c5-11ea-145f-6383effe8a89
@@ -1355,7 +1420,7 @@ bigbreak
 # ╟─0fbe2af6-f381-11ea-2f41-23cd1cf930d9
 # ╟─48089a00-f321-11ea-1479-e74ba71df067
 # ╟─6b4d6584-f3be-11ea-131d-e5bdefcc791b
-# ╟─437ba6ce-f37d-11ea-1010-5f6a6e282f9b
+# ╠═437ba6ce-f37d-11ea-1010-5f6a6e282f9b
 # ╟─ef88c388-f388-11ea-3828-ff4db4d1874e
 # ╟─ef26374a-f388-11ea-0b4e-67314a9a9094
 # ╟─6bdbcf4c-f321-11ea-0288-fb16ff1ec526
