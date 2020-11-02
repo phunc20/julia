@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.11.14
+# v0.12.6
 
 using Markdown
 using InteractiveUtils
@@ -40,6 +40,12 @@ md"""Blurry Fons magic: Exploiting Structure!
 
 ADD A HINT BOX HERE WITH THE ANSWER "STRUCTURE" """
 
+# ╔═╡ 671c9ad2-1cbf-11eb-1c57-dbb7f3d8e728
+hint(text) = Markdown.MD(Markdown.Admonition("hint", "Hint", [text]))
+
+# ╔═╡ 43e5b364-1cbf-11eb-2d5f-61e48bb73d66
+hint(md"##### Structure")
+
 # ╔═╡ 261c4df2-f5d2-11ea-2c72-7d4b09c46098
 md"One-hot vectors:  Numbers and images
 
@@ -47,6 +53,21 @@ md"One-hot vectors:  Numbers and images
 
 # ╔═╡ b5177f70-f60b-11ea-14a9-f5a574cc5185
 Pkg.activate(mktempdir())
+
+# ╔═╡ d61dc726-1cbd-11eb-2190-4f39b2237ffc
+md"
+**(?1)**
+What's `Pkg.activate(mktempdir())` all about?
+"
+
+# ╔═╡ 77494690-1cbe-11eb-1368-f1a05b955df0
+md"**(R1)** Attempts to answer:"
+
+# ╔═╡ 14cddfc6-1cbe-11eb-376e-5b62a7d6ef5a
+tempdir()
+
+# ╔═╡ 14069fea-1cbe-11eb-2f31-f149c32f8491
+mktempdir()  # Try executing this cell several times to see the efect
 
 # ╔═╡ ef8f44b2-f5fc-11ea-1e4d-bd873cd39d6c
 @bind nn Slider(1:20, show_value=true)
@@ -57,6 +78,9 @@ Pkg.activate(mktempdir())
 # ╔═╡ 3a1ed5b8-f5fd-11ea-2ecd-b9d08349651f
 colors = [colorant"black", colorant"red"]
 
+# ╔═╡ 97c98efc-1cbe-11eb-1e22-b74415521c72
+md"`colorant`? Where is it defined?"
+
 # ╔═╡ 77ae1146-f5d2-11ea-1226-27d15c90a8df
 begin
 	v = fill(1, nn)
@@ -65,25 +89,25 @@ begin
 	colors[v]'
 end
 
-# ╔═╡ 676f6e3a-f5fd-11ea-3552-e7e7c6382276
-v
+# ╔═╡ d41aaa20-1cbf-11eb-2882-d5835fb6b01b
+md"**(?2)**
+`'` means __transpose__ of a matrix?
+"
 
 # ╔═╡ 3592648a-f5fd-11ea-2ed0-a1d4a4c14d07
 colors[v]
 
+# ╔═╡ c6bbee3c-1cbf-11eb-1870-1d16fdaefb32
+typeof(colors[v])
+
 # ╔═╡ 81d88bea-11e0-11eb-02c9-3d6a58988296
 colors[v]'
 
-# ╔═╡ a4069c20-11e0-11eb-3267-d931e5a0abc3
-md"
-`'` means __transpose__ of a matrix?
-"
-
-# ╔═╡ c52dba46-11e0-11eb-3459-9fb0a1186698
-typeof(colors[v])
-
-# ╔═╡ c4642e6c-11e0-11eb-3a21-1d8a659eebb9
+# ╔═╡ f0520d6e-1cbf-11eb-156a-058f99206dd0
 typeof(colors[v]')
+
+# ╔═╡ 04af1a66-1cbf-11eb-1b75-4fdbc38a1eec
+v
 
 # ╔═╡ 7ffa02f6-f5d2-11ea-1b41-15c21f92e9ee
 Int.((1:10) .== 3)
@@ -112,14 +136,19 @@ Base.getindex(x::OneHot, i::Int) = Int(x.k == i)
 # ╔═╡ 7a98f708-f5d3-11ea-2301-cde71ca469ff
 x = OneHot(5, 3)
 
-# ╔═╡ 60214c1a-f5fe-11ea-2d08-c59715bcedd0
-x[1:2]
+# ╔═╡ a8386252-1cc0-11eb-20f3-418d6a4ed672
+x[1:4]
 
 # ╔═╡ cf77d83c-f5fd-11ea-136e-8951de64e05e
 show_vector(x::OneHot) = colors[x .+ 1]'
 
 # ╔═╡ 58d63ebc-11e1-11eb-028f-316ba21898a8
 show_vector(x)
+
+# ╔═╡ b1aad82e-1cc0-11eb-3703-4fc209772fb1
+md"
+##### Stopped here (2020/11/02 (月) 11h00)
+"
 
 # ╔═╡ 5813e1b2-f5ff-11ea-2849-a1def74fc065
 begin
@@ -204,7 +233,7 @@ md"Sparse matrix dictionaries? Before CSC"
 
 # ╔═╡ 7c56506a-11e2-11eb-373f-97b7497a89b7
 md"
-### Stopped here (2020/10/19 15h10)
+##### Stopped here (2020/10/19 15h10)
 "
 
 # ╔═╡ 62a6ec62-f5d9-11ea-071e-ed33c5dea0cd
@@ -556,20 +585,27 @@ end
 # ╔═╡ Cell order:
 # ╟─b0ba5b8c-f5d1-11ea-1304-3f0e47f935fe
 # ╟─ffa95430-f5d1-11ea-3cb7-5bb8d8f13701
+# ╟─671c9ad2-1cbf-11eb-1c57-dbb7f3d8e728
+# ╟─43e5b364-1cbf-11eb-2d5f-61e48bb73d66
 # ╟─261c4df2-f5d2-11ea-2c72-7d4b09c46098
 # ╠═ae24c8b2-f60b-11ea-2c7a-03857d1217b2
 # ╠═b5177f70-f60b-11ea-14a9-f5a574cc5185
+# ╟─d61dc726-1cbd-11eb-2190-4f39b2237ffc
+# ╟─77494690-1cbe-11eb-1368-f1a05b955df0
+# ╠═14cddfc6-1cbe-11eb-376e-5b62a7d6ef5a
+# ╠═14069fea-1cbe-11eb-2f31-f149c32f8491
 # ╠═bc14fc1a-f60b-11ea-207a-91b967f28076
 # ╠═ef8f44b2-f5fc-11ea-1e4d-bd873cd39d6c
 # ╠═fd9211c0-f5fc-11ea-1745-7f2dae88af9e
 # ╠═3a1ed5b8-f5fd-11ea-2ecd-b9d08349651f
-# ╠═676f6e3a-f5fd-11ea-3552-e7e7c6382276
+# ╟─97c98efc-1cbe-11eb-1e22-b74415521c72
 # ╠═77ae1146-f5d2-11ea-1226-27d15c90a8df
+# ╟─d41aaa20-1cbf-11eb-2882-d5835fb6b01b
 # ╠═3592648a-f5fd-11ea-2ed0-a1d4a4c14d07
+# ╠═c6bbee3c-1cbf-11eb-1870-1d16fdaefb32
 # ╠═81d88bea-11e0-11eb-02c9-3d6a58988296
-# ╟─a4069c20-11e0-11eb-3267-d931e5a0abc3
-# ╠═c52dba46-11e0-11eb-3459-9fb0a1186698
-# ╠═c4642e6c-11e0-11eb-3a21-1d8a659eebb9
+# ╠═f0520d6e-1cbf-11eb-156a-058f99206dd0
+# ╠═04af1a66-1cbf-11eb-1b75-4fdbc38a1eec
 # ╠═7ffa02f6-f5d2-11ea-1b41-15c21f92e9ee
 # ╠═0690e74c-11e1-11eb-236a-736f63a47db0
 # ╟─21a15906-f5d3-11ea-3a71-f53eabc31acc
@@ -577,10 +613,11 @@ end
 # ╠═4624cd26-f5d3-11ea-1cf8-7d6555eae5fa
 # ╠═397ac764-f5fe-11ea-20cc-8d7cab19d410
 # ╠═82c7046c-f5d3-11ea-04e2-ef7c0f4db5da
-# ╠═60214c1a-f5fe-11ea-2d08-c59715bcedd0
 # ╠═7a98f708-f5d3-11ea-2301-cde71ca469ff
+# ╠═a8386252-1cc0-11eb-20f3-418d6a4ed672
 # ╠═cf77d83c-f5fd-11ea-136e-8951de64e05e
 # ╠═58d63ebc-11e1-11eb-028f-316ba21898a8
+# ╟─b1aad82e-1cc0-11eb-3703-4fc209772fb1
 # ╠═5813e1b2-f5ff-11ea-2849-a1def74fc065
 # ╠═e51d4ef6-f5fd-11ea-28f1-a1616e17f715
 # ╠═982590d4-f5ff-11ea-3802-73292c75ad6c
@@ -613,9 +650,9 @@ end
 # ╠═aa09c008-f5d8-11ea-1bdc-b51ee6eb2478
 # ╟─d941cd66-f5d8-11ea-26ff-47ba7779ab20
 # ╠═7c56506a-11e2-11eb-373f-97b7497a89b7
-# ╟─62a6ec62-f5d9-11ea-071e-ed33c5dea0cd
+# ╠═62a6ec62-f5d9-11ea-071e-ed33c5dea0cd
 # ╠═67274c3c-f5d9-11ea-3475-c9d228e3bd5a
-# ╟─b6c7a918-f600-11ea-18ff-6521507358c6
+# ╠═b6c7a918-f600-11ea-18ff-6521507358c6
 # ╟─765c6552-f5d9-11ea-29d3-bfe7b4b04612
 # ╠═0f6ecba6-f5da-11ea-22c2-2929e562f413
 # ╠═126fb3ea-f5da-11ea-2f7d-0b3259a296ce

@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.12.4
+# v0.12.6
 
 using Markdown
 using InteractiveUtils
@@ -80,6 +80,17 @@ append!((1,2,3), 4)
 # ╔═╡ 64dd78d2-184f-11eb-33a0-35aff834145d
 append!([1,2,3], 4)
 
+# ╔═╡ 8cc4d30e-1c23-11eb-32c2-8f9ec3233e94
+md"
+##### function arg: copy or view?
+"
+
+# ╔═╡ 8c50e9a8-1c23-11eb-2ce1-b33950eb43b5
+
+
+# ╔═╡ 8b80bcf6-1c23-11eb-2a1c-7d2945b51023
+
+
 # ╔═╡ Cell order:
 # ╟─93a73a2c-1848-11eb-136d-071fe5df0b74
 # ╠═7148d638-1846-11eb-035c-818d51cf9b50
@@ -103,3 +114,6 @@ append!([1,2,3], 4)
 # ╠═402cb642-184f-11eb-3fe0-c11f79a97568
 # ╠═71517e7e-184f-11eb-0230-6b7905123364
 # ╠═64dd78d2-184f-11eb-33a0-35aff834145d
+# ╠═8cc4d30e-1c23-11eb-32c2-8f9ec3233e94
+# ╠═8c50e9a8-1c23-11eb-2ce1-b33950eb43b5
+# ╠═8b80bcf6-1c23-11eb-2a1c-7d2945b51023
