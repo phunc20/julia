@@ -425,6 +425,42 @@ md"""
 
 """
 
+# ╔═╡ ad791c68-2c04-11eb-3a92-ad36738f5e78
+@which v4 .* v4'
+
+# ╔═╡ db0a0372-2c04-11eb-3c72-f9d81da2a28c
+@which v4 * v4'
+
+# ╔═╡ c9b5e918-2c04-11eb-33e8-b703e68f9665
+@which .*(v4, v4')
+
+# ╔═╡ 8ffa6880-2c05-11eb-07d8-a98305f1ff73
+@which [1,2,3] * 3
+
+# ╔═╡ a3bd08c8-2c05-11eb-284c-cb199f8dbcbd
+[1,2,3] * 3
+
+# ╔═╡ f366e2f4-2c05-11eb-39fc-b726defe9776
+typeof([1,2,3] * 3)
+
+# ╔═╡ f78a3c84-2c05-11eb-326a-4f20b69ec3ff
+typeof([1,2,3] * [4,5,6])
+
+# ╔═╡ 0b0f105c-2c06-11eb-2e14-594db4c80510
+[1,2,3] .* [4,5,6]
+
+# ╔═╡ 2ab8f6ca-2c06-11eb-2f06-1993332149a2
+[[1,2,3] * x for x in [4,5,6]]
+
+# ╔═╡ 4470b678-2c06-11eb-34fe-afcb2893e9cc
+[1,2,3] .* [4,5,6]'
+
+# ╔═╡ 59af5186-2c06-11eb-0565-e71d522a21cc
+typeof([4,5,6]')
+
+# ╔═╡ 05628762-2c06-11eb-3896-9f92e1a709dd
+typeof([1,2,3] .* [4,5,6])
+
 # ╔═╡ 0ed78e76-f5dd-11ea-2ad8-a35a69c0ef9a
 v4
 
@@ -562,11 +598,22 @@ download(url, "tree.jpg")
 # ╔═╡ f2c11f88-f5f8-11ea-3e02-c1d4fa22031e
 begin
 	image = load("tree.jpg")
+	#println(size(image))
 	image = image[1:5:end, 1:5:end]
+	#println(size(image))
 end
+
+# ╔═╡ eebb9094-2c03-11eb-2115-affb6b5ca59e
+size(load("tree.jpg"))
+
+# ╔═╡ f76cd784-2c03-11eb-3bf6-5bcd2d928839
+size(load("tree.jpg")[1:5:end, 1:5:end])
 
 # ╔═╡ f7e38aaa-f5f8-11ea-002f-09dd1fa21181
 reds = [Float64(c.r) for c in image]
+
+# ╔═╡ 291abb52-2c04-11eb-3b85-53f6149f94f4
+[c.r for c in image]
 
 # ╔═╡ 29062f7a-f5f9-11ea-2682-1374e7694e32
 picture = Float64.(channelview(image))
@@ -574,14 +621,14 @@ picture = Float64.(channelview(image))
 # ╔═╡ 6156fd1e-f5f9-11ea-06a9-211c7ab813a4
 pr, pg, pb = eachslice(picture, dims=1)
 
+# ╔═╡ 05366132-2c09-11eb-3d7a-031e7045159b
+pr
+
 # ╔═╡ a9766e68-f5f9-11ea-0019-6f9d02050521
 [RGB.(pr, 0, 0) RGB.(0, pg, 0) RGB.(0, 0, pb)]
 
 # ╔═╡ fee66076-f5f9-11ea-2316-abc57b62a57c
-RGB.(image
-
-# ╔═╡ 6532b388-f5f9-11ea-2ae2-f9b12e441bb3
-pr
+RGB.(image)
 
 # ╔═╡ 0c0ee362-f5f9-11ea-0f75-2d2810c88d65
 begin
@@ -593,6 +640,21 @@ end
 # ╔═╡ 3c28c4c2-f5fa-11ea-1947-9dfe91ea1535
 RGB.(sum(outer(Ur[:,i], Vr[:,i]) .* Σr[i] for i in 1:5), 0, 0)
 
+# ╔═╡ 6c66a4f2-2c09-11eb-09ec-517d7a704aec
+(pr, 0, 0)
+
+# ╔═╡ a67f9766-2c09-11eb-3fb7-df7b74234074
+typeof(RGB.(pr, 0, 0))
+
+# ╔═╡ b181e768-2c09-11eb-13c0-f1405cc311c7
+size(RGB.(pr, 0, 0))
+
+# ╔═╡ bc42c514-2c09-11eb-3ce8-b719da4ed6f6
+md"""
+**(?)** What's the logic behind the fact that we are able to write `RGB.(pr, 0, 0)`?
+
+"""
+
 # ╔═╡ f56f40e4-f5fa-11ea-3a99-156565445c2e
 @bind n Slider(1:100, show_value=true)
 
@@ -603,6 +665,11 @@ RGB.(sum(outer(Ur[:,i], Vr[:,i]) .* Σr[i] for i in 1:n),
 
 # ╔═╡ 8a22387e-f5fb-11ea-249b-435af5c0a6b6
 
+
+# ╔═╡ f9825a40-2c09-11eb-0d75-4ff8439275b9
+md"""
+**(?)** Try to do the same thing with `tree.jpg` in **python** and see how its speed is compared to Julia.
+"""
 
 # ╔═╡ 8df84fcc-f5d5-11ea-312f-bf2a3b3ce2ce
 md"## Appendix"
@@ -685,6 +752,45 @@ with_terminal() do
 	sum(outer(Ub[:,i], Vb[:,i]) .* Σb[i] for i in 1:20));
 end
 
+# ╔═╡ 69374b56-2c04-11eb-090b-8362caf5fbb2
+[Float64(c.r) for c in image]
+
+# ╔═╡ a58cf152-2c20-11eb-1b79-13ec5f4fab2a
+RGB.([0.1, 0.9], 0, 0)
+
+# ╔═╡ 393638d2-2c21-11eb-2a34-4da73047b06d
+RGB.(rand(Float64,(10,10)), 0, 0)
+
+# ╔═╡ a81a2394-2c21-11eb-3db9-c17ac60d28e7
+rand(Float64,(10,10))
+
+# ╔═╡ 7726fca8-2c21-11eb-0f4c-2d1df7865516
+RGB(0.9)
+
+# ╔═╡ b78a3800-2c21-11eb-0073-d96ffc667e00
+RGB(0.9, 0.1, 0.7)
+
+# ╔═╡ 32b8c00a-2c22-11eb-015f-a7390ac535d2
+RGB.([rand(Float64,(10,10)),0,0])
+
+# ╔═╡ 8c2879a0-2c22-11eb-3bfd-77ff960527bb
+#begin
+#	K = rand(Float64,(10,10))
+#	RGB.([K,K,K])
+#end
+
+# ╔═╡ a81d41b8-2c22-11eb-28b4-0be55a229a28
+begin
+	K = rand(Float64,(10,10))
+	RGB.((K,K,K))
+end
+
+# ╔═╡ dfd12e92-2c8d-11eb-01ff-bd25c7907027
+RGB.([K K K])
+
+# ╔═╡ fda82466-2c8d-11eb-2e3e-433b03ddab15
+RGB.([K, K, K])
+
 # ╔═╡ Cell order:
 # ╟─b0ba5b8c-f5d1-11ea-1304-3f0e47f935fe
 # ╟─ffa95430-f5d1-11ea-3cb7-5bb8d8f13701
@@ -765,7 +871,7 @@ end
 # ╠═cde79f38-f5d6-11ea-3297-0b5b240f7b9e
 # ╠═aa09c008-f5d8-11ea-1bdc-b51ee6eb2478
 # ╟─d941cd66-f5d8-11ea-26ff-47ba7779ab20
-# ╠═7c56506a-11e2-11eb-373f-97b7497a89b7
+# ╟─7c56506a-11e2-11eb-373f-97b7497a89b7
 # ╟─62a6ec62-f5d9-11ea-071e-ed33c5dea0cd
 # ╠═67274c3c-f5d9-11ea-3475-c9d228e3bd5a
 # ╠═febc5df6-2bd2-11eb-1d9d-8b166645c3fa
@@ -817,6 +923,18 @@ end
 # ╠═a9daf4cc-f5dc-11ea-270b-2566f89f168c
 # ╠═dc0c8b72-f5dc-11ea-3e6f-0f43cbf58f56
 # ╟─54b34efc-2bd5-11eb-0aeb-0b55b6dcdff9
+# ╠═ad791c68-2c04-11eb-3a92-ad36738f5e78
+# ╠═db0a0372-2c04-11eb-3c72-f9d81da2a28c
+# ╠═c9b5e918-2c04-11eb-33e8-b703e68f9665
+# ╠═8ffa6880-2c05-11eb-07d8-a98305f1ff73
+# ╠═a3bd08c8-2c05-11eb-284c-cb199f8dbcbd
+# ╠═f366e2f4-2c05-11eb-39fc-b726defe9776
+# ╠═f78a3c84-2c05-11eb-326a-4f20b69ec3ff
+# ╠═0b0f105c-2c06-11eb-2e14-594db4c80510
+# ╠═2ab8f6ca-2c06-11eb-2f06-1993332149a2
+# ╠═4470b678-2c06-11eb-34fe-afcb2893e9cc
+# ╠═59af5186-2c06-11eb-0565-e71d522a21cc
+# ╠═05628762-2c06-11eb-3896-9f92e1a709dd
 # ╠═0ed78e76-f5dd-11ea-2ad8-a35a69c0ef9a
 # ╠═1648a0fa-f5dd-11ea-0292-495207e83de9
 # ╠═1e9cefea-f5dd-11ea-3e5f-a189fd41c42e
@@ -851,22 +969,41 @@ end
 # ╠═4cf96558-f5e0-11ea-19be-db4c59a41120
 # ╠═11de523c-f5e0-11ea-2f3d-c981c1b6a1fe
 # ╟─fb0c6c7e-f5df-11ea-38d0-2d98c9dc232f
-# ╠═ebd72fb8-f5e0-11ea-0630-573337dff753
-# ╠═f00d1eaa-f5e0-11ea-21df-d9cf6f7af9b9
+# ╟─ebd72fb8-f5e0-11ea-0630-573337dff753
+# ╟─f00d1eaa-f5e0-11ea-21df-d9cf6f7af9b9
 # ╠═b6478e1a-f5f6-11ea-3b92-6d4f067285f4
 # ╠═d4a049a2-f5f8-11ea-2f34-4bc0e3a5954a
 # ╠═f2c11f88-f5f8-11ea-3e02-c1d4fa22031e
+# ╠═eebb9094-2c03-11eb-2115-affb6b5ca59e
+# ╠═f76cd784-2c03-11eb-3bf6-5bcd2d928839
 # ╠═f7e38aaa-f5f8-11ea-002f-09dd1fa21181
+# ╠═291abb52-2c04-11eb-3b85-53f6149f94f4
 # ╠═29062f7a-f5f9-11ea-2682-1374e7694e32
 # ╠═6156fd1e-f5f9-11ea-06a9-211c7ab813a4
+# ╠═05366132-2c09-11eb-3d7a-031e7045159b
 # ╠═a9766e68-f5f9-11ea-0019-6f9d02050521
 # ╠═fee66076-f5f9-11ea-2316-abc57b62a57c
-# ╠═6532b388-f5f9-11ea-2ae2-f9b12e441bb3
 # ╠═0c0ee362-f5f9-11ea-0f75-2d2810c88d65
 # ╠═3c28c4c2-f5fa-11ea-1947-9dfe91ea1535
+# ╠═6c66a4f2-2c09-11eb-09ec-517d7a704aec
+# ╠═a67f9766-2c09-11eb-3fb7-df7b74234074
+# ╠═b181e768-2c09-11eb-13c0-f1405cc311c7
+# ╠═bc42c514-2c09-11eb-3ce8-b719da4ed6f6
 # ╠═f56f40e4-f5fa-11ea-3a99-156565445c2e
 # ╠═7ba6e6a6-f5fa-11ea-2bcd-616d5a3c898b
 # ╠═8a22387e-f5fb-11ea-249b-435af5c0a6b6
 # ╠═4f8684ea-f5fb-11ea-07be-11d8046f35df
-# ╠═8df84fcc-f5d5-11ea-312f-bf2a3b3ce2ce
+# ╠═f9825a40-2c09-11eb-0d75-4ff8439275b9
+# ╟─8df84fcc-f5d5-11ea-312f-bf2a3b3ce2ce
 # ╠═91980bcc-f5d5-11ea-211f-e9a08ff0fb19
+# ╠═69374b56-2c04-11eb-090b-8362caf5fbb2
+# ╠═a58cf152-2c20-11eb-1b79-13ec5f4fab2a
+# ╠═393638d2-2c21-11eb-2a34-4da73047b06d
+# ╠═a81a2394-2c21-11eb-3db9-c17ac60d28e7
+# ╠═7726fca8-2c21-11eb-0f4c-2d1df7865516
+# ╠═b78a3800-2c21-11eb-0073-d96ffc667e00
+# ╠═32b8c00a-2c22-11eb-015f-a7390ac535d2
+# ╠═8c2879a0-2c22-11eb-3bfd-77ff960527bb
+# ╠═a81d41b8-2c22-11eb-28b4-0be55a229a28
+# ╠═dfd12e92-2c8d-11eb-01ff-bd25c7907027
+# ╠═fda82466-2c8d-11eb-2e3e-433b03ddab15
