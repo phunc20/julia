@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.11.14
+# v0.12.7
 
 using Markdown
 using InteractiveUtils
@@ -74,6 +74,12 @@ md"A matrix that can be written exactly as a single multiplication table is call
 # ╔═╡ 2e8ae92a-f867-11ea-0219-1bdd9627c1ea
 md"Let's see what a general rank-1 matrix looks like:"
 
+# ╔═╡ 8aa02958-2034-11eb-3553-1b55ff42c430
+rand(5)  # uniform random from [0, 1)
+
+# ╔═╡ 9ff4c5f2-2037-11eb-28fe-f7959f6ae703
+#ColorSchemes.rainbow
+
 # ╔═╡ 38adc490-f867-11ea-1de5-3b633aff7c97
 image = outer([1; 0.4; rand(50)], rand(500));
 
@@ -114,8 +120,10 @@ md"## Plotting data"
 md"We would like to **visualise** this data. There are various plotting packages that we could use. We will use `Plots.jl`:"
 
 # ╔═╡ 7bacf44e-f896-11ea-38be-2b16ae7ca99f
+#scatter(xx, yy, alpha=0.5, framestyle=:origin, label="original image", leg=:topleft,
+#		xlabel="x values", ylabel="y values")
 scatter(xx, yy, alpha=0.5, framestyle=:origin, label="original image", leg=:topleft,
-		xlabel="x values", ylabel="y values")
+		xlabel="x values", ylabel="y values", size=(100,100))
 
 # ╔═╡ 1147cbda-f867-11ea-08fa-ef6ed2ae1e93
 begin
@@ -550,6 +558,9 @@ colors = show_image(replace(M3, missing=>0))
 # ╔═╡ f175b60a-f901-11ea-0fcb-01fc17ec2a97
 colors[ismissing.(M3)]
 
+# ╔═╡ 0d7e5150-30c4-11eb-3c40-45cf170445e0
+￼
+
 # ╔═╡ Cell order:
 # ╟─3b9941ac-6043-4dc6-850f-4c7b3ae9d9a7
 # ╟─7365084a-1f37-4897-bca4-fc5855c5ee4e
@@ -566,10 +577,12 @@ colors[ismissing.(M3)]
 # ╟─cdbe1d8e-f905-11ea-3884-efeeef386dda
 # ╟─d9aa9af0-f865-11ea-379e-f16b452bd94c
 # ╟─2e8ae92a-f867-11ea-0219-1bdd9627c1ea
+# ╠═8aa02958-2034-11eb-3553-1b55ff42c430
+# ╠═9ff4c5f2-2037-11eb-28fe-f7959f6ae703
 # ╠═38adc490-f867-11ea-1de5-3b633aff7c97
 # ╠═b183b6ca-f864-11ea-0b34-4dd3f4f5e69d
 # ╟─9cf23f9a-f864-11ea-3a08-af448aceefd8
-# ╟─a5b62530-f864-11ea-21e8-71ccfed487f8
+# ╠═a5b62530-f864-11ea-21e8-71ccfed487f8
 # ╠═5471ddce-f867-11ea-2519-21981f5ea68b
 # ╟─c41df86c-f865-11ea-1253-4942bbdbe9d2
 # ╟─7fca33ac-f864-11ea-2a8b-933eb382c172
@@ -581,7 +594,7 @@ colors[ismissing.(M3)]
 # ╟─8775b3fe-f866-11ea-3e6f-9732e39a3525
 # ╠═0dcfd858-f867-11ea-301c-c3ca0a224117
 # ╠═7bacf44e-f896-11ea-38be-2b16ae7ca99f
-# ╟─1147cbda-f867-11ea-08fa-ef6ed2ae1e93
+# ╠═1147cbda-f867-11ea-08fa-ef6ed2ae1e93
 # ╟─8a611e36-f867-11ea-121f-317b7c145fe3
 # ╟─f7371934-f867-11ea-3b53-d1566684585c
 # ╟─119dc35c-ec94-11ea-190c-23a750fbe7f4
@@ -669,3 +682,4 @@ colors[ismissing.(M3)]
 # ╠═8f599fae-f901-11ea-25e5-11a1f569aef1
 # ╠═e465ca72-f901-11ea-22f3-318147c8d79a
 # ╠═f175b60a-f901-11ea-0fcb-01fc17ec2a97
+# ╠═0d7e5150-30c4-11eb-3c40-45cf170445e0

@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.12.6
+# v0.12.7
 
 using Markdown
 using InteractiveUtils
@@ -52,7 +52,7 @@ Feel free to ask questions!
 # ╔═╡ 33e43c7c-f381-11ea-3abc-c942327456b1
 # edit the code below to set your name and kerberos ID (i.e. email without @mit.edu)
 
-student = (name = "Jazzy Doe", kerberos_id = "jazz")
+student = (name = "phunc20", kerberos_id = "30420")
 
 # you might need to wait until all other cells in this notebook have completed running. 
 # scroll around the page to see what's up
@@ -71,6 +71,19 @@ html"""
 <iframe width="100%" height="450px" src="https://www.youtube.com/embed/ConoBmjlivs?rel=0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 """
 
+# ╔═╡ ed8af6c2-32f4-11eb-3bc3-4ffb169d14de
+md"""
+It can be quite interesting to adjust the given html code for youtube video linke inclusion
+- change `height`
+- delete the `allowfullscreen` (after which you will indeed be unable to make the embedded video fullscreen)
+- etc.
+"""
+
+# ╔═╡ 9d15ee90-32f4-11eb-33ed-199ac5518921
+html"""
+<iframe width="100%" height="200px" src="https://www.youtube.com/embed/ConoBmjlivs?rel=0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"></iframe>
+"""
+
 # ╔═╡ 6f9df800-f92d-11ea-2d49-c1aaabd2d012
 md"""
 ## **Exercise 1:** _Language detection_
@@ -83,13 +96,57 @@ Let's start with some obvious structure in English text: the set of characters t
 # ╔═╡ b61722cc-f98f-11ea-22ae-d755f61f78c3
 String(rand(Char, 40))
 
+# ╔═╡ 572d60d8-32f5-11eb-1f9c-094c6ddeb03b
+rand(Char, 20)
+
 # ╔═╡ f457ad44-f990-11ea-0e2d-2bb7627716a8
 md"""
-Instead, let's define an _alphabet_, and only use those letters to sample from. To keep things simple, we ignore punctuation, capitalization, etc, and only use these 27 characters:
+Instead, let's define an _alphabet_, and only use those letters to sample from. To keep things simple, we ignore punctuation, capitalization, etc, and only use these 27 characters (including the **white space**):
 """
 
 # ╔═╡ 4efc051e-f92e-11ea-080e-bde6b8f9295a
 alphabet = ['a':'z' ; ' ']   # includes the space character
+
+# ╔═╡ 24ce128a-32f6-11eb-3cee-3b79d9ec3f70
+typeof(alphabet)
+
+# ╔═╡ 3487130c-32f6-11eb-3f06-39173b5a7f57
+['a':'z', ' ']
+
+# ╔═╡ 53e85d12-330a-11eb-1f52-0fd4138f9705
+md"
+**(?)** What's the diff btw using `,` and `;` in an array?
+"
+
+# ╔═╡ 8a43fbde-32f6-11eb-0e30-73cb0d975a41
+[1,2,3], [1;2;3]
+
+# ╔═╡ 2929aa64-32f7-11eb-20c7-c9e453d5cd18
+size([1,2,3]), size([1;2;3])
+
+# ╔═╡ 35cd3af6-32f7-11eb-2888-0594d11a82ab
+'a':'z'
+
+# ╔═╡ 439bf05a-32f7-11eb-1d1d-d75b52ac3b62
+size('a':'z')
+
+# ╔═╡ 4fcc75d4-32f7-11eb-376e-f501684d006c
+[[1,2,3] ; 4]
+
+# ╔═╡ 6f5d399c-32f7-11eb-099a-c17892eada14
+[1:10; 11]
+
+# ╔═╡ 89c24ae8-32f7-11eb-3b43-153730b3f911
+[1:10; "hello world"]
+
+# ╔═╡ 96b6e894-32f7-11eb-3023-d73df045ebc5
+[1:10,  "hello world"]
+
+# ╔═╡ aa8e74e0-32f7-11eb-3825-61d3791d0040
+md"
+- `[array; k]`: views `k` as a continuing entry of the Array `array`
+- `[array, k]`: is an Array with two entries, `array` and `k`
+"
 
 # ╔═╡ 38d1ace8-f991-11ea-0b5f-ed7bd08edde5
 md"""
@@ -98,6 +155,28 @@ Let's sample random characters from our alphabet:
 
 # ╔═╡ ddf272c8-f990-11ea-2135-7bf1a6dca0b7
 String(rand(alphabet, 40)) |> Text
+
+# ╔═╡ 2a7b1b0e-32f8-11eb-012e-1b9813ff8b53
+md"
+In order to see the doc of `|>`, you can visually select the two characters.
+"
+
+# ╔═╡ 58a0f5e4-32f8-11eb-21cb-17376b94c07c
+[1:5;] |> x->x.^2 |> sum |> inv
+
+# ╔═╡ b1224b78-32f8-11eb-0d5c-151a581d31ee
+1/(1+4+9+16+25)
+
+# ╔═╡ 5bb48dea-32f8-11eb-192e-a520f50a8421
+[1:5], [1:5;], 1:5, 1:2:5
+
+# ╔═╡ dbb24abe-32f8-11eb-0906-f5984690a074
+md"
+**(?)** What does `Text` do?
+"
+
+# ╔═╡ 19c25a66-32f8-11eb-350e-4fc0b66f59da
+String(rand(alphabet, 40))
 
 # ╔═╡ 3cc688d2-f996-11ea-2a6f-0b4c7a5b74c2
 md"""
@@ -113,6 +192,16 @@ Remember that the $(html"<img src='https://cdn.jsdelivr.net/gh/ionic-team/ionico
 
 We also include a sample of Spanish, which we'll use later!
 """
+
+# ╔═╡ 036914c2-330b-11eb-3e0f-57a6214eea4f
+md"
+**(?)** How to access to an entry of a `NamedTuple`?
+"
+
+# ╔═╡ 2db56e0e-32f9-11eb-01fa-e5654e340e08
+md"
+##### Stopped here (2020/11/30 17h45)
+"
 
 # ╔═╡ a094e2ac-f92d-11ea-141a-3566552dd839
 md"""
@@ -134,10 +223,21 @@ $(html"<br>")
 We have written a function `isinalphabet`, which takes a character and returns a boolean:
 """
 
+# ╔═╡ 9f74f6f4-330b-11eb-091a-19c1a5db40dc
+md"
+**(?)** Check out the source code of `filter` to see how it does this.
+"
+
+# ╔═╡ 8df9b862-330b-11eb-3b89-f9b3619bbfa2
+@which filter
+
 # ╔═╡ 5c74a052-f92e-11ea-2c5b-0f1a3a14e313
 function isinalphabet(character)
 	character ∈ alphabet
 end
+
+# ╔═╡ c10b97f0-330b-11eb-10bc-db68aa50709e
+alphabet
 
 # ╔═╡ dcc4156c-f997-11ea-3e6f-057cd080d9db
 isinalphabet('a'), isinalphabet('+')
@@ -149,7 +249,30 @@ md"👉 Use `filter` to extract just the characters from our alphabet out of `me
 messy_sentence_1 = "#wow 2020 ¥500 (blingbling!)"
 
 # ╔═╡ 75694166-f998-11ea-0428-c96e1113e2a0
-cleaned_sentence_1 = missing
+cleaned_sentence_1 = filter(isinalphabet, messy_sentence_1)
+
+# ╔═╡ 9013e28e-330c-11eb-39c7-bfe6a04fd891
+md"
+**(?)** How to use `missing` like `pass` in a function definition in Julia?
+
+**(R)** Just as below.
+"
+
+# ╔═╡ 67f1585e-330c-11eb-05c2-8d342cbc7174
+function do_nothing(abc)
+	missing
+end
+
+# ╔═╡ 44ffd6aa-330d-11eb-3f58-e774a9fc80da
+md"
+**(?)** You may check out how these functions (`keep_working`, `still_missing`, `not_defined`, etc.) are defined when you have time.
+"
+
+# ╔═╡ 257afd4e-330d-11eb-08a4-23168f9bf921
+:messy_sentence_1
+
+# ╔═╡ 27915a9c-330d-11eb-2bab-7142bc335ab7
+typeof(:messy_sentence_1)
 
 # ╔═╡ 05f0182c-f999-11ea-0a52-3d46c65a049e
 md"""
@@ -161,11 +284,29 @@ We are not interested in the case of letters (i.e. `'A'` vs `'a'`), so we want t
 # ╔═╡ 98266882-f998-11ea-3270-4339fb502bc7
 md"👉 Use the function `lowercase` to convert `messy_sentence_2` into a lower case string, and then use `filter` to extract only the characters from our alphabet."
 
+# ╔═╡ 968bc42c-330e-11eb-222b-934594884e71
+md"
+**(?)** Check out the source code of `lowercase`
+"
+
+
 # ╔═╡ d3c98450-f998-11ea-3caf-895183af926b
 messy_sentence_2 = "Awesome! 😍"
 
 # ╔═╡ d3a4820e-f998-11ea-2a5c-1f37e2a6dd0a
-cleaned_sentence_2 = missing
+cleaned_sentence_2 = filter(isinalphabet, lowercase(messy_sentence_2))
+
+# ╔═╡ ef800fe8-330e-11eb-2663-31f0f09aea8e
+md"""
+**Note** that you could have also chosen to use **composite function** `g ∘ f`.
+$(html"<br>")
+(the ∘ can be typed by `\circ <Tab>`)
+
+cf. [https://docs.julialang.org/en/v1/manual/functions/#Function-composition-and-piping](https://docs.julialang.org/en/v1/manual/functions/#Function-composition-and-piping))
+"""
+
+# ╔═╡ e19115c8-330e-11eb-2fc0-1df7072ed610
+filter(isinalphabet ∘ lowercase, messy_sentence_2)
 
 # ╔═╡ aad659b8-f998-11ea-153e-3dae9514bfeb
 md"""
@@ -176,6 +317,16 @@ Finally, we need to deal with **accents**: simply deleting accented characters f
 
 # ╔═╡ d236b51e-f997-11ea-0c55-abb11eb35f4d
 french_word = "Égalité!"
+
+# ╔═╡ 8f42431a-3310-11eb-2791-45f8a60d30f3
+md"""
+**(?)** How `unaccent` does its job?
+$(html"<br>")
+$(html"<br>")
+**(R)** `unaccent` is defined in the next two cells.
+$(html"<br>")
+**Note** that when you check the doc of `unaccent`, the text typed btw the `\"\"\"` on top of the definition gets displayed.
+"""
 
 # ╔═╡ 24860970-fc48-11ea-0009-cddee695772c
 import Unicode
@@ -200,8 +351,38 @@ Los bosques pueden hallarse en todas las regiones capaces de mantener el crecimi
 """ |> unaccent,
 )
 
+# ╔═╡ d81f36e6-330a-11eb-159a-2137e1636c8e
+typeof(samples)
+
+# ╔═╡ eb5ea298-330a-11eb-2c8a-39722ea2da27
+samples["English"]
+
+# ╔═╡ f94cb78a-330a-11eb-3108-670a9ac2a2b7
+samples.English
+
 # ╔═╡ a56724b6-f9a0-11ea-18f2-991e0382eccf
 unaccent(french_word)
+
+# ╔═╡ 0055631e-3311-11eb-106a-a525adcc4fdb
+unaccent("áéíóúüñ asdf")
+
+# ╔═╡ 0b919810-3311-11eb-0892-7d112fef1327
+"áéíóúüñ asdf"
+
+# ╔═╡ 6129efd6-3311-11eb-1c78-3ba6fcb8fd62
+md"What about tiếng Việt?"
+
+# ╔═╡ 702861de-3311-11eb-36a9-856441fb1653
+unaccent("Để mình thử một câu tiếng Việt xem thử nhé.")
+
+# ╔═╡ 87e4f3f0-3311-11eb-3653-0919d27528fe
+md"Almost perfect -- Only the \"`Đ`\" failed."
+
+# ╔═╡ b42f223c-3311-11eb-2c19-b79a8a7abfd1
+Unicode.normalize("Để mình thử một câu tiếng Việt xem thử nhé.", stripmark=false)
+
+# ╔═╡ c80645c4-3311-11eb-299c-853e85426f54
+Unicode.normalize("áéíóúüñ asdf", stripmark=false)
 
 # ╔═╡ 8d3bc9ea-f9a1-11ea-1508-8da4b7674629
 md"""
@@ -213,14 +394,34 @@ $(html"<br>")
 - it is filtered to only contain characters from `alphabet`
 """
 
+# ╔═╡ 2c92e6dc-3312-11eb-2186-6fe143fdbba4
+md"
+**(?)** Could `lowercase()` properly render capital letters with accents?
+"
+
+# ╔═╡ 581f3d3c-3312-11eb-1fef-d58c8b4f1028
+lowercase("MỘT CÂU TIẾNG VIỆT VIẾT HOA et UNE PHRASE ÉCRITE ENTIÈREMENT EN FRANÇAIS")
+
 # ╔═╡ 4affa858-f92e-11ea-3ece-258897c37e51
 function clean(text)
 	# we turn everything to lowercase to keep the number of letters small
-	missing
+	#filter(isinalphabet ∘ lowercase ∘ unaccent, text)
+	#filter(isinalphabet ∘ (lowercase ∘ unaccent), text)
+	filter(isinalphabet, (lowercase ∘ unaccent)(text))
 end
 
 # ╔═╡ e00d521a-f992-11ea-11e0-e9da8255b23b
 clean("Crème brûlée est mon plat préféré.")
+
+# ╔═╡ 8c5eb234-3313-11eb-216c-5d76a3dc318f
+md"
+**(?)** Why the first two tries failed in the definition of `clean()`?
+"
+
+# ╔═╡ 09be7dce-3312-11eb-3503-cb45617b8fcf
+md"
+##### Stopped here (2020/11/30 20h45)
+"
 
 # ╔═╡ 2680b506-f9a3-11ea-0849-3989de27dd9f
 first_sample = clean(first(samples))
@@ -957,6 +1158,9 @@ else
 	end
 end
 
+# ╔═╡ 32933f32-330d-11eb-0a4d-2f3a1d26f2a9
+not_defined(:messy_sentence_1)
+
 # ╔═╡ cee0f984-f9a0-11ea-2c3c-53fe26156ea4
 if !@isdefined(messy_sentence_2)
 	not_defined(:messy_sentence_2)
@@ -1134,43 +1338,93 @@ bigbreak
 # ╟─e6b6760a-f37f-11ea-3ae1-65443ef5a81a
 # ╟─ec66314e-f37f-11ea-0af4-31da0584e881
 # ╟─85cfbd10-f384-11ea-31dc-b5693630a4c5
-# ╠═33e43c7c-f381-11ea-3abc-c942327456b1
+# ╟─33e43c7c-f381-11ea-3abc-c942327456b1
 # ╟─938185ec-f384-11ea-21dc-b56b7469f798
 # ╠═86e1ee96-f314-11ea-03f6-0f549b79e7c9
 # ╠═a4937996-f314-11ea-2ff9-615c888afaa8
-# ╟─b49a21a6-f381-11ea-1a98-7f144c55c9b7
+# ╠═b49a21a6-f381-11ea-1a98-7f144c55c9b7
 # ╟─c086bd1e-f384-11ea-3b26-2da9e24360ca
+# ╟─ed8af6c2-32f4-11eb-3bc3-4ffb169d14de
+# ╠═9d15ee90-32f4-11eb-33ed-199ac5518921
 # ╟─6f9df800-f92d-11ea-2d49-c1aaabd2d012
 # ╠═b61722cc-f98f-11ea-22ae-d755f61f78c3
+# ╠═572d60d8-32f5-11eb-1f9c-094c6ddeb03b
 # ╟─f457ad44-f990-11ea-0e2d-2bb7627716a8
 # ╠═4efc051e-f92e-11ea-080e-bde6b8f9295a
+# ╠═24ce128a-32f6-11eb-3cee-3b79d9ec3f70
+# ╠═3487130c-32f6-11eb-3f06-39173b5a7f57
+# ╟─53e85d12-330a-11eb-1f52-0fd4138f9705
+# ╠═8a43fbde-32f6-11eb-0e30-73cb0d975a41
+# ╠═2929aa64-32f7-11eb-20c7-c9e453d5cd18
+# ╠═35cd3af6-32f7-11eb-2888-0594d11a82ab
+# ╠═439bf05a-32f7-11eb-1d1d-d75b52ac3b62
+# ╠═4fcc75d4-32f7-11eb-376e-f501684d006c
+# ╠═6f5d399c-32f7-11eb-099a-c17892eada14
+# ╠═89c24ae8-32f7-11eb-3b43-153730b3f911
+# ╠═96b6e894-32f7-11eb-3023-d73df045ebc5
+# ╟─aa8e74e0-32f7-11eb-3825-61d3791d0040
 # ╟─38d1ace8-f991-11ea-0b5f-ed7bd08edde5
 # ╠═ddf272c8-f990-11ea-2135-7bf1a6dca0b7
+# ╟─2a7b1b0e-32f8-11eb-012e-1b9813ff8b53
+# ╠═58a0f5e4-32f8-11eb-21cb-17376b94c07c
+# ╠═b1224b78-32f8-11eb-0d5c-151a581d31ee
+# ╠═5bb48dea-32f8-11eb-192e-a520f50a8421
+# ╟─dbb24abe-32f8-11eb-0906-f5984690a074
+# ╠═19c25a66-32f8-11eb-350e-4fc0b66f59da
 # ╟─3cc688d2-f996-11ea-2a6f-0b4c7a5b74c2
-# ╟─d67034d0-f92d-11ea-31c2-f7a38ebb412f
+# ╠═d67034d0-f92d-11ea-31c2-f7a38ebb412f
+# ╠═d81f36e6-330a-11eb-159a-2137e1636c8e
+# ╟─036914c2-330b-11eb-3e0f-57a6214eea4f
+# ╠═eb5ea298-330a-11eb-2c8a-39722ea2da27
+# ╠═f94cb78a-330a-11eb-3108-670a9ac2a2b7
+# ╟─2db56e0e-32f9-11eb-01fa-e5654e340e08
 # ╟─a094e2ac-f92d-11ea-141a-3566552dd839
 # ╠═27c9a7f4-f996-11ea-1e46-19e3fc840ad9
 # ╟─f2a4edfa-f996-11ea-1a24-1ba78fd92233
-# ╟─5c74a052-f92e-11ea-2c5b-0f1a3a14e313
+# ╟─9f74f6f4-330b-11eb-091a-19c1a5db40dc
+# ╠═8df9b862-330b-11eb-3b89-f9b3619bbfa2
+# ╠═5c74a052-f92e-11ea-2c5b-0f1a3a14e313
+# ╠═c10b97f0-330b-11eb-10bc-db68aa50709e
 # ╠═dcc4156c-f997-11ea-3e6f-057cd080d9db
 # ╟─129fbcfe-f998-11ea-1c96-0fd3ccd2dcf8
 # ╠═3a5ee698-f998-11ea-0452-19b70ed11a1d
 # ╠═75694166-f998-11ea-0428-c96e1113e2a0
-# ╟─6fe693c8-f9a1-11ea-1983-f159131880e9
+# ╟─9013e28e-330c-11eb-39c7-bfe6a04fd891
+# ╠═67f1585e-330c-11eb-05c2-8d342cbc7174
+# ╠═6fe693c8-f9a1-11ea-1983-f159131880e9
+# ╠═44ffd6aa-330d-11eb-3f58-e774a9fc80da
+# ╠═257afd4e-330d-11eb-08a4-23168f9bf921
+# ╠═27915a9c-330d-11eb-2bab-7142bc335ab7
+# ╠═32933f32-330d-11eb-0a4d-2f3a1d26f2a9
 # ╟─05f0182c-f999-11ea-0a52-3d46c65a049e
 # ╟─98266882-f998-11ea-3270-4339fb502bc7
+# ╟─968bc42c-330e-11eb-222b-934594884e71
 # ╠═d3c98450-f998-11ea-3caf-895183af926b
 # ╠═d3a4820e-f998-11ea-2a5c-1f37e2a6dd0a
 # ╟─cee0f984-f9a0-11ea-2c3c-53fe26156ea4
+# ╟─ef800fe8-330e-11eb-2663-31f0f09aea8e
+# ╠═e19115c8-330e-11eb-2fc0-1df7072ed610
 # ╟─aad659b8-f998-11ea-153e-3dae9514bfeb
 # ╠═d236b51e-f997-11ea-0c55-abb11eb35f4d
 # ╠═a56724b6-f9a0-11ea-18f2-991e0382eccf
-# ╟─24860970-fc48-11ea-0009-cddee695772c
-# ╟─734851c6-f92d-11ea-130d-bf2a69e89255
+# ╟─8f42431a-3310-11eb-2791-45f8a60d30f3
+# ╠═24860970-fc48-11ea-0009-cddee695772c
+# ╠═734851c6-f92d-11ea-130d-bf2a69e89255
+# ╠═0055631e-3311-11eb-106a-a525adcc4fdb
+# ╠═0b919810-3311-11eb-0892-7d112fef1327
+# ╟─6129efd6-3311-11eb-1c78-3ba6fcb8fd62
+# ╠═702861de-3311-11eb-36a9-856441fb1653
+# ╟─87e4f3f0-3311-11eb-3653-0919d27528fe
+# ╠═b42f223c-3311-11eb-2c19-b79a8a7abfd1
+# ╠═c80645c4-3311-11eb-299c-853e85426f54
 # ╟─8d3bc9ea-f9a1-11ea-1508-8da4b7674629
+# ╟─2c92e6dc-3312-11eb-2186-6fe143fdbba4
+# ╠═581f3d3c-3312-11eb-1fef-d58c8b4f1028
 # ╠═4affa858-f92e-11ea-3ece-258897c37e51
 # ╠═e00d521a-f992-11ea-11e0-e9da8255b23b
 # ╟─ddfb1e1c-f9a1-11ea-3625-f1170272e96a
+# ╟─8c5eb234-3313-11eb-216c-5d76a3dc318f
+# ╟─09be7dce-3312-11eb-3503-cb45617b8fcf
 # ╟─eaa8c79e-f9a2-11ea-323f-8bb2bd36e11c
 # ╠═2680b506-f9a3-11ea-0849-3989de27dd9f
 # ╟─571d28d6-f960-11ea-1b2e-d5977ecbbb11
